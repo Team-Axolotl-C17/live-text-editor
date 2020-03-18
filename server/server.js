@@ -20,7 +20,7 @@ io.on('connection', socket => {
   // handle coding event
   socket.on('coding', data => {
     console.log(data);
-    socket.broadcast.emit('receive code', data);
+    io.to(data.room).emit('code sent', data);
   });
 });
 
