@@ -1,16 +1,13 @@
-import React, { Component } from 'react';
-import ReactDOM, { render } from 'react-dom';
+import React from 'react';
 
-class Editor extends Component {
-    constructor(){
-        super();
-    }
-    render() {
-        return(
-            <div>
-                <input value={this.props.value} onChange={this.props.onChange} />
-            </div>
-        )
-    }
-}
+const Editor = props => {
+  return (
+    <div>
+      <input
+        value={props.code}
+        onChange={e => props.updateCodeinState(e.target.value)}
+      />
+    </div>
+  );
+};
 export default Editor;
