@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
 const socket = require('socket.io');
 const app = express();
@@ -21,13 +20,13 @@ io.on('connection', socket => {
   // handle coding event
   socket.on('coding', data => {
     console.log(data);
-    socket.broadcast.emit('receive code', data);
+    io.to(data.room).emit('code sent', data);
   });
 });
 
 // Handle parsing request body
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Handle requests for client files
 app.use(express.static(path.resolve(__dirname, '../client')));
