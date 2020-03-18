@@ -26,8 +26,8 @@ io.on('connection', socket => {
 });
 
 // Handle parsing request body
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Handle requests for client files
 app.use(express.static(path.resolve(__dirname, '../client')));
