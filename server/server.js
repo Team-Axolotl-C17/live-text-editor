@@ -21,7 +21,7 @@ io.on('connection', socket => {
     socket.join(data.room, err => {
       if (err) console.error(err);
     });
-    console.log(`User ${socket.id} joined room ${'some room'}`);
+    console.log(`User ${socket.id} joined room ${data.room}`);
     console.log(io.sockets.adapter.rooms);
   });
 
