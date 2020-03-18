@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import EditorContainer from './Editor-Container';
+import EditorContainer from '../Containers/Editor-Container';
 
 
 class App extends Component {
