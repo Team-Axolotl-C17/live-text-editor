@@ -12,15 +12,25 @@ const io = socket(server);
 
 // test for connection
 io.on('connection', socket => {
-  console.log('a user connected');
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 
+  // Join room when 'room' event is emitted
+  socket.on('room', data => {
+    socket.join(data.room, err => {
+      if (err) console.error(err);
+    });
+    console.log(`User ${socket.id} joined room ${data.room}`);
+    console.log(io.sockets.adapter.rooms);
+  });
+
+  // TODO: Handle leave room event when user switches room
+
   // handle coding event
   socket.on('coding', data => {
     console.log(data);
-    io.to(data.room).emit('code sent', data);
+    socket.broadcast.to(data.room).emit('code sent from server', data);
   });
 });
 
