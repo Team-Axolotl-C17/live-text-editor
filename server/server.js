@@ -18,9 +18,9 @@ io.on('connection', socket => {
   });
 
   // handle coding event
-  socket.on('coding', data => {
+  socket.on('client coding', data => {
     console.log(data);
-    io.to(data.room).emit('code sent', data);
+    io.to(data.room).emit('code sent from server', data);
   });
 });
 
