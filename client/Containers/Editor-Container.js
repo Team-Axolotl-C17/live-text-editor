@@ -12,7 +12,11 @@ class EditorContainer extends Component {
       code: '',
       room: 'default'
     };
-    this.updateCodeinState = this.updateCodeinState.bind(this);
+    // Listen for 'code sent from server'
+    socket.on('code sent from server', payload => {
+      this.updateCodeFromSockets(payload);
+    });
+    this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
   }
 
   // emit 'room' event when component mounts
@@ -37,10 +41,6 @@ class EditorContainer extends Component {
   }
 
   render() {
-    // Listen for 'code sent from server'
-    socket.on('code sent from server', payload => {
-      this.setState({ code: payload.newCode });
-    });
     return (
       <div>
         <Editor
