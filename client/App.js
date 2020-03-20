@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import EditorContainer from '../Containers/Editor-Container';
-import DocsContainer from '../Containers/Docs-Container';
-import UserContainer from '../Containers/User-Container';
-import LoginContainer from '../Containers/Login-Container';
+import EditorContainer from './Containers/Editor-Container';
+import DocsContainer from './Containers/Docs-Container';
+import UserContainer from './Containers/User-Container';
+import LoginContainer from './Containers/Login-Container';
 
 class App extends Component {
   constructor() {

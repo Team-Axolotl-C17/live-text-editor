@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
+import Editor from '../Components/Editor';
 const socket = io('localhost:3000');
 
 class EditorContainer extends Component {
