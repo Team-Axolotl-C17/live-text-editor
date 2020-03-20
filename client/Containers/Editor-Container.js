@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import io from 'socket.io-client';
 const socket = io('localhost:3000');
 
-// CodeMirror imports
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import '../assets/codemirror-5.52.0/mode/javascript/javascript';
-import '../assets/codemirror-5.52.0/lib/codemirror.css';
-import '../assets/codemirror-5.52.0/theme/dracula.css';
-
 class EditorContainer extends Component {
   // Temporarily placing socket logic inside this container component
   // Can move elsewhere when refactoring, but note that socket logic needs to be handled in a single place
@@ -46,23 +40,19 @@ class EditorContainer extends Component {
   updateCodeFromSockets(payload) {
     this.setState({ code: payload.newCode });
   }
-  // TODO: Update the state to match what other clients have already put there. Otherwise
+  // TODO: Update the state to match what other clients have already put there.
   render() {
-    const options = {
-      mode: 'javascript',
-      theme: 'dracula',
-      lineNumbers: true
-    };
     return (
       <div>
-        <h1>Get Ready to Code</h1>
-        <CodeMirror
-          className="codemirror"
-          value={this.state.code}
-          options={options}
-          onBeforeChange={(editor, data, value) => {
-            this.updateCodeinState(value);
+        <h1>Editor</h1>
+        <Editor
+          style={{
+            height: '75%',
+            width: '100%'
           }}
+          code={this.state.code}
+          room={this.state.room}
+          updateCodeinState={this.updateCodeinState.bind(this)}
         />
       </div>
     );

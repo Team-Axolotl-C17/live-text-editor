@@ -1,32 +1,42 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import EditorContainer from './Containers/Editor-Container';
-import './app.css';
+import EditorContainer from '../Containers/Editor-Container';
+import DocsContainer from '../Containers/Docs-Container';
+import UserContainer from '../Containers/User-Container';
+import LoginContainer from '../Containers/Login-Container';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      value: ''
+      value: '',
+      loggedIn: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
-    const { value } = e.target;
-    this.setState(() => {
-      return {
-        value
-      };
-    });
+  handleChange() {
+    // const { loggedIn } = e.target;
+    this.setState({ loggedIn: true });
   }
   render() {
     return (
-      <div className="app">
-        <EditorContainer
-          value={this.state.value}
-          onChange={this.handleChange}
-        />
+      <div>
+        {!this.state.loggedIn && (
+          <div>
+            <LoginContainer
+              loggedIn={this.state.loggedIn}
+              onClick={this.handleChange}
+            />
+          </div>
+        )}
+        {this.state.loggedIn && (
+          <div>
+            <DocsContainer />
+            <EditorContainer value={this.state.value} />
+            <UserContainer />
+          </div>
+        )}
       </div>
     );
   }
