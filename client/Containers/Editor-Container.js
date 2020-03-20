@@ -43,7 +43,13 @@ class EditorContainer extends Component {
   render() {
     return (
       <div>
+        <h1>Editor</h1>
         <Editor
+          style={{
+            "height": "75%",
+            "width": "100%"
+          }
+          }
           code={this.state.code}
           room={this.state.room}
           updateCodeinState={this.updateCodeinState.bind(this)}
