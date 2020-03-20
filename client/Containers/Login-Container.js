@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Login from '../Components/Login';
 
 class LoginContainer extends Component {
-    constructor() {
-        super();
+  constructor() {
+    super();
+  }
 
-    }
-
-    render() {
-        return(
-            <div>
-                <Login logedIn={this.props.logedIn} onClick={this.props.onClick} />
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <Login loggedIn={this.props.loggedIn} onClick={this.props.onClick} />
+      </div>
+    );
+  }
 }
 
 export default LoginContainer;
