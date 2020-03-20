@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import Editor from '../Components/Editor';
 import io from 'socket.io-client';
 const socket = io('localhost:3000');
+
+// CodeMirror imports
+import { Controlled as CodeMirror } from 'react-codemirror2';
+import '../assets/codemirror-5.52.0/mode/javascript/javascript';
+import '../assets/codemirror-5.52.0/lib/codemirror.css';
+import '../assets/codemirror-5.52.0/theme/dracula.css';
 
 class EditorContainer extends Component {
   // Temporarily placing socket logic inside this container component
@@ -9,13 +14,14 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: '',
+      code: 'wut',
       room: 'default'
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', payload => {
       this.updateCodeFromSockets(payload);
     });
+    this.updateCodeinState = this.updateCodeinState.bind(this);
     this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
   }
 
@@ -25,6 +31,7 @@ class EditorContainer extends Component {
   }
 
   // TODO: add logic for switching rooms (need to implement in UI first)
+  // Use in editorDidMount?
 
   // Handle local state updates
   updateCodeinState(text) {
@@ -39,14 +46,23 @@ class EditorContainer extends Component {
   updateCodeFromSockets(payload) {
     this.setState({ code: payload.newCode });
   }
-
+  // TODO: Update the state to match what other clients have already put there. Otherwise
   render() {
+    const options = {
+      mode: 'javascript',
+      theme: 'dracula',
+      lineNumbers: true
+    };
     return (
       <div>
-        <Editor
-          code={this.state.code}
-          room={this.state.room}
-          updateCodeinState={this.updateCodeinState.bind(this)}
+        <h1>Get Ready to Code</h1>
+        <CodeMirror
+          className="codemirror"
+          value={this.state.code}
+          options={options}
+          onBeforeChange={(editor, data, value) => {
+            this.updateCodeinState(value);
+          }}
         />
       </div>
     );
