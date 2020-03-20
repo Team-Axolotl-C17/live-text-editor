@@ -43,6 +43,7 @@ class EditorContainer extends Component {
   render() {
     return (
       <div>
+        <h1>Editor</h1>
         <Editor
           code={this.state.code}
           room={this.state.room}

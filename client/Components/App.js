@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import EditorContainer from '../Containers/Editor-Container';
-
+import DocsContainer from '../Containers/Docs-Container';
+import UserContainer from '../Containers/User-Container';
 
 class App extends Component {
     constructor() {
@@ -23,7 +24,9 @@ class App extends Component {
     render() {
         return (
             <div>
+                <DocsContainer />
                 <EditorContainer value={this.state.value} onChange={this.handleChange}/>
+                <UserContainer />
             </div>
         )
     }
