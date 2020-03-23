@@ -9,9 +9,9 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: '2 + 3',
-      consoleOutput: '',
-      room: 'default'
+      code: 'Start coding!',
+      consoleOutput: 'Console output will display here',
+      room: 'Axolotl'
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', payload => {
@@ -54,12 +54,8 @@ class EditorContainer extends Component {
   render() {
     return (
       <div>
-        <h1>Editor</h1>
+        <h1>Current Room: {this.state.room}</h1>
         <Editor
-          style={{
-            height: '75%',
-            width: '100%'
-          }}
           code={this.state.code}
           room={this.state.room}
           updateCodeinState={this.updateCodeinState.bind(this)}
