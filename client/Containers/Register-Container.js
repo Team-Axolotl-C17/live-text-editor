@@ -3,13 +3,14 @@ import auth from "../Components/auth";
 import Input from "../Components/Input";
 import Logo from "../Components/Logo";
 
-class LoginContainer extends Component {
+class RegisterContainer extends Component {
   constructor() {
     super();
     this.state = {
-      username: '',
-      password: '',
-      warning: ''
+      user: { username: '',
+              password: '',
+      }, 
+      msg: ''
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
@@ -17,63 +18,63 @@ class LoginContainer extends Component {
 
   handleInputChange(event) {
     const { value, name } = event.target;
+    const { user } = this.state;
     this.setState({
-      [name]: value
+      user: {...user, [name]: value}
     });
-    console.log('username: ', this.state.username);
-    console.log('password: ', this.state.password);
+    console.log('username: ', this.state.user.username);
+    console.log('password: ', this.state.user.password);
   }
-  
+
   clickHandler(event){
     event.preventDefault();
     console.log(this.state);
-    fetch('/login', {
+    fetch('/register', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(this.state)
-    }).
-    then(res => {
-      if (res.status === 401) {
-        this.setState({ warning: "username and password do not match please try again" })
-      } else if (res.status === 406) {
-               this.setState({ warning: "username is not found try again" })
-               this.props.history.push('/login')
-             } else {
-                 auth.login(() => {
-                   this.props.history.push("/app") 
-                 })
-               }
+      body: JSON.stringify(this.state.user)
     })
+    .then(res => {
+      if (res.status === 409) {
+        this.setState({
+          msg: "username already in use try again" 
+        })
+        this.props.history.push("/register");
+        console.log('this.state.msg: ', this.state.msg);
+      }
+    })
+    .then(auth.login(() => {
+        this.props.history.push("/login");
+      }))
   };
 
   render() {
     return (
       <div className='Modal'>
-        <h2>LOGIN</h2>
+        <h2>REGISTER</h2>
         <Logo/>
         <form onSubmit={this.clickHandler}>
           <Input
             type='text' 
-            value={this.state.username} 
+            value={this.state.user.username} 
             name='username' 
             onChange={this.handleInputChange} 
             placeholder='username' 
           />
-          <Input 
+          <Input
             type='password' 
-            value={this.state.password} 
+            value={this.state.user.password} 
             name='password' 
             onChange={this.handleInputChange} 
             placeholder='password'
           />
-            <p>{this.state.warning}</p>
+          <h3>{this.state.msg}</h3>
           <button type="submit" value="submit">SUBMIT</button>
         </form>
-        
       </div>
     );
   }
 
 };
 
-export default LoginContainer
+export default RegisterContainer
