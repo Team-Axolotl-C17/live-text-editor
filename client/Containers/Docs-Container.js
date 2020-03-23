@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import DocsDisplay from '../Components/Docs-Display';
 import Doc from '../Components/Doc';
 
