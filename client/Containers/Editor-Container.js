@@ -9,7 +9,8 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: 'wut',
+      code: 'default text',
+      consoleOutput: '',
       room: 'default'
     };
     // Listen for 'code sent from server'
