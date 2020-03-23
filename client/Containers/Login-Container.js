@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import auth from "../Components/auth";
 import Input from "../Components/Input";
 import Logo from "../Components/Logo";
+import { Link } from "react-router-dom";
 
 class LoginContainer extends Component {
   constructor() {
@@ -40,7 +41,7 @@ class LoginContainer extends Component {
                this.props.history.push('/login')
              } else {
                  auth.login(() => {
-                   this.props.history.push("/app") 
+                   this.props.history.push("/") 
                  })
                }
     })
@@ -66,6 +67,7 @@ class LoginContainer extends Component {
             onChange={this.handleInputChange} 
             placeholder='password'
           />
+          <Link to="/register">Register</Link>
             <p>{this.state.warning}</p>
           <button type="submit" value="submit">SUBMIT</button>
         </form>
