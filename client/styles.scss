@@ -1,0 +1,60 @@
+body {
+  background-color: rgb(153, 153, 252);
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* .app {
+    width: 100vh;
+    min-height: 100vh;
+  } */
+
+.AppLayout {
+  background-color: rgb(240, 240, 240);
+  font-family: sans-serif;
+  text-align: center;
+}
+
+li {
+  list-style: none;
+}
+
+.Modal {
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: blueviolet;
+  background-size: cover;
+  border-radius: 5px;
+}
+
+.Modal input {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  border-bottom: 1px solid #58a4b0;
+  margin: 25px 50px;
+  width: 150px;
+  height: 25px;
+}
+
+.Modal button {
+  background-color: rgb(240, 240, 240);
+  font-size: 14px;
+  width: 80px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.Modal p {
+  font-size: 10px;
+}
+
+.AppLayout .codemirror {
+  text-align: left;
+}
+
+.console {
+  text-align: left;
+}

@@ -9,9 +9,9 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: 'default text',
-      consoleOutput: '',
-      room: 'default'
+      code: 'Start coding!',
+      consoleOutput: 'Console output will display here',
+      room: 'Axolotl'
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', payload => {
@@ -19,6 +19,7 @@ class EditorContainer extends Component {
     });
     this.updateCodeinState = this.updateCodeinState.bind(this);
     this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
+    this.runCode = this.runCode.bind(this);
   }
 
   // emit 'room' event when component mounts
@@ -42,19 +43,24 @@ class EditorContainer extends Component {
   updateCodeFromSockets(payload) {
     this.setState({ code: payload.newCode });
   }
+
+  runCode(code) {
+    this.setState({ consoleOutput: eval(code) }, () =>
+      console.log(this.state.consoleOutput)
+    );
+  }
+
   // TODO: Update the state to match what other clients have already put there.
   render() {
     return (
       <div>
-        <h1>Editor</h1>
+        <h1>Current Room: {this.state.room}</h1>
         <Editor
-          style={{
-            height: '75%',
-            width: '100%'
-          }}
           code={this.state.code}
           room={this.state.room}
           updateCodeinState={this.updateCodeinState.bind(this)}
+          runCode={this.runCode}
+          consoleOutput={this.state.consoleOutput}
         />
       </div>
     );

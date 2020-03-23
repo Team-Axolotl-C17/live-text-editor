@@ -24,7 +24,8 @@ const Editor = props => {
           props.updateCodeinState(value);
         }}
       />
-      <Console code={props.code} />
+      <button onClick={() => props.runCode(props.code)}>Run Code</button>
+      <Console output={props.consoleOutput} />
     </div>
   );
 };
