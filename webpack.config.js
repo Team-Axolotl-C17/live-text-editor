@@ -12,16 +12,18 @@ module.exports = {
   // },
   mode: process.env.NODE_ENV,
   devServer: {
-    publicPath: path.join(__dirname, "/dist/"),
+    contentBase: path.resolve(__dirname, 'client'),
+    publicPath: path.join(__dirname, '/dist/'),
     compress: true,
     port: 8080,
     proxy: {
-        '/': 'http://localhost:3000'
+      '/': 'http://localhost:3000'
     }
   },
   entry: './client/index.js',
   output: {
-    path: path.resolve(__dirname, './dist/')
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js'
   },
   module: {
     rules: [

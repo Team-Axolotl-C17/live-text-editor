@@ -1,4 +1,6 @@
 import React from 'react';
+import Console from './Console';
+
 // CodeMirror imports
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import '../assets/codemirror-5.52.0/mode/javascript/javascript';
@@ -11,6 +13,7 @@ const Editor = props => {
     theme: 'dracula',
     lineNumbers: true
   };
+
   return (
     <div>
       <CodeMirror
@@ -21,15 +24,7 @@ const Editor = props => {
           props.updateCodeinState(value);
         }}
       />
-      {/* <input
-        style={{
-          "height": "200%",
-          "width": "100%"
-        }
-        }
-        value={props.code}
-        onChange={e => props.updateCodeinState(e.target.value)}
-      /> */}
+      <Console code={props.code} />
     </div>
   );
 };

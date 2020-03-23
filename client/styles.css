@@ -50,7 +50,7 @@ li {
   font-size: 10px;
 }
 
-.codemirror {
+.AppLayout .codemirror {
   text-align: left;
 }
 
