@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Team-Axolotl-C17/live-text-editor#readme",
   "dependencies": {
+    "assert": "^2.0.0",
     "bcrypt": "^4.0.1",
     "codemirror": "^5.52.0",
     "context-eval": "^0.1.0",
@@ -32,7 +33,8 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

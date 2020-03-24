@@ -57,9 +57,11 @@ app.get('/', (req, res) => {
 app.get('/secret', function (req, res) {
   res.send('The password is potato');
 });
+
 app.post('/register', userController.createUser, (req, res) => {
   return res.status(200).send('Successful add to database');
 });
+
 app.post('/login', userController.loginUser, (req, res) => {
   return res.status(200).json('Successful login');
 });
