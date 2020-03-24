@@ -12,14 +12,14 @@ const server = app.listen(PORT, () => {
 const io = socket(server);
 
 // test for connection
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 
   // Join room when 'room' event is emitted
-  socket.on('room', data => {
-    socket.join(data.room, err => {
+  socket.on('room', (data) => {
+    socket.join(data.room, (err) => {
       if (err) console.error(err);
     });
     console.log(`User ${socket.id} joined room ${data.room}`);
@@ -29,7 +29,7 @@ io.on('connection', socket => {
   // TODO: Handle leave room event when user switches room
 
   // handle coding event
-  socket.on('coding', data => {
+  socket.on('coding', (data) => {
     console.log(data);
     socket.broadcast.to(data.room).emit('code sent from server', data);
   });
@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 // }
 
 // Define route handlers
-app.get('/secret', function(req, res) {
+app.get('/secret', function (req, res) {
   res.send('The password is potato');
 });
 app.post('/register', userController.createUser, (req, res) => {
@@ -71,7 +71,7 @@ app.use((err, req, res, next) => {
     const defaultErr = {
       log: 'Express error handler caught unknown middleware error',
       status: 400,
-      message: { err: 'An error occurred' }
+      message: { err: 'An error occurred' },
     };
     const errorObj = Object.assign(defaultErr, err);
     res.status(errorObj.status).json(errorObj.message);

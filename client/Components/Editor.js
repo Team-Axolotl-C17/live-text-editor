@@ -7,11 +7,11 @@ import '../assets/codemirror-5.52.0/mode/javascript/javascript';
 import '../assets/codemirror-5.52.0/lib/codemirror.css';
 import '../assets/codemirror-5.52.0/theme/dracula.css';
 
-const Editor = props => {
+const Editor = (props) => {
   const options = {
     mode: 'javascript',
     theme: 'dracula',
-    lineNumbers: true
+    lineNumbers: true,
   };
 
   return (

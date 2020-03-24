@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Console = props => {
+const Console = (props) => {
   return <div className="console">{props.output}</div>;
 };
 

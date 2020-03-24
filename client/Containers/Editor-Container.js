@@ -11,10 +11,10 @@ class EditorContainer extends Component {
     this.state = {
       code: 'Start coding!',
       consoleOutput: 'Console output will display here',
-      room: 'Axolotl'
+      room: 'Axolotl',
     };
     // Listen for 'code sent from server'
-    socket.on('code sent from server', payload => {
+    socket.on('code sent from server', (payload) => {
       this.updateCodeFromSockets(payload);
     });
     this.updateCodeinState = this.updateCodeinState.bind(this);
@@ -35,7 +35,7 @@ class EditorContainer extends Component {
     this.setState({ code: text }, () => console.log(this.state.code));
     socket.emit('coding', {
       room: this.state.room,
-      newCode: text
+      newCode: text,
     });
   }
 
