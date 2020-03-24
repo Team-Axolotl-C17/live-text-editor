@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import EditorContainer from '../Containers/Editor-Container';
-import DocsContainer from '../Containers/Docs-Container';
 import UserContainer from '../Containers/User-Container';
 import auth from "./auth";
 
@@ -14,9 +13,8 @@ class MainApp extends Component {
 	render(){
   return (
     <div>
-      <h1>Main App</h1>
+      <h1>TEST</h1>
       <div>
-				<DocsContainer />
 				<EditorContainer value={this.state.value} />
 				<UserContainer />
       </div>

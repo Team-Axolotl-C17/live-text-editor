@@ -4,6 +4,15 @@ const socket = require('socket.io');
 const app = express();
 const userController = require('./controllers/userController');
 const PORT = 3000;
+const webpack = require('webpack');
+const webpackConfig = require('../webpack.config.js');
+
+const compiler = webpack(webpackConfig);
+
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true, publicPath: webpackConfig.output.publicPath, stats: { colors: true }
+}));
+app.use(require('webpack-hot-middleware')(compiler));
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -41,7 +50,7 @@ app.use(express.json());
 
 // Handle requests for client files
 // app.use(express.static(path.resolve(__dirname, '../client')));
-app.use(express.static(path.resolve(__dirname, '../dist')));
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/index.html'));
 });
