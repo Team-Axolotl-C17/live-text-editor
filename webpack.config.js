@@ -1,30 +1,27 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  // devServer: {
-  //   // contentBase: path.resolve(__dirname, 'client'),
-  //   publicPath: '/build/',
-  //   historyApiFallback: true,
-  //   proxy: {
-  //     '/users': 'http://localhost:3000'
-  //   }
-  // },
-  mode: process.env.NODE_ENV,
-  devServer: {
-    contentBase: path.resolve(__dirname, 'client'),
-    publicPath: path.join(__dirname, '/dist/'),
-    compress: true,
-    hot:true,
-    port: 8080,
-    proxy: {
-      '/': 'http://localhost:3000'
-    }
+  entry: {
+    app: ['./client/index.js', 'webpack-hot-middleware/client'],
+    vendor: ['react', 'react-dom']
   },
-  entry: './client/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
+  },
+  mode: process.NODE_ENV,
+  devServer: {
+    publicPath: '/dist/',
+    port: 8080,
+    proxy: {
+      '/': 'http://localhost:3000'
+    },
+    hot:true
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
   module: {
     rules: [
@@ -43,5 +40,9 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'index.html') }),
+    new webpack.HotModuleReplacementPlugin()
+  ],
 };

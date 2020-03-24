@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import Editor from '../Components/Editor';
+
 const socket = io('localhost:3000');
 
 class EditorContainer extends Component {
@@ -18,7 +19,7 @@ class EditorContainer extends Component {
     socket.on('code sent from server', payload => {
       this.updateCodeFromSockets(payload);
     });
-
+    
     this.updateCodeinState = this.updateCodeinState.bind(this);
     this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
     this.runCode = this.runCode.bind(this);
