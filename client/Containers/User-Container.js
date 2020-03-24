@@ -4,20 +4,16 @@ import UserDisplay from '../Components/User-Display';
 import User from '../Components/User';
 
 class UserContainer extends Component {
-    constructor() {
-        super();
-    }
-
-    render() {
-        return (
-            <div>
-                <UserDisplay />
-                <User />
-                <User />
-                <User />
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <UserDisplay />
+        <User />
+        <User />
+        <User />
+      </div>
+    );
+  }
 }
 
 export default UserContainer;

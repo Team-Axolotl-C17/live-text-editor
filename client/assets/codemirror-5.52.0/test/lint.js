@@ -1,20 +1,20 @@
-var blint = require("blint");
+var blint = require('blint');
 
-["mode", "lib", "addon", "keymap"].forEach(function(dir) {
+['mode', 'lib', 'addon', 'keymap'].forEach(function (dir) {
   blint.checkDir(dir, {
     browser: true,
-    allowedGlobals: ["CodeMirror", "define", "test", "requirejs"],
+    allowedGlobals: ['CodeMirror', 'define', 'test', 'requirejs'],
     ecmaVersion: 5,
-    tabs: dir == "lib"
+    tabs: dir == 'lib',
   });
 });
 
-["src"].forEach(function(dir) {
+['src'].forEach(function (dir) {
   blint.checkDir(dir, {
     browser: true,
     ecmaVersion: 6,
-    semicolons: false
+    semicolons: false,
   });
 });
 
-module.exports = {ok: blint.success()};
+module.exports = { ok: blint.success() };

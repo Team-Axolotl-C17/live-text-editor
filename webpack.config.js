@@ -17,13 +17,13 @@ module.exports = {
     compress: true,
     port: 8080,
     proxy: {
-      '/': 'http://localhost:3000'
-    }
+      '/': 'http://localhost:3000',
+    },
   },
   entry: './client/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -33,28 +33,28 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
       },
       {
         test: /\.html$/,
         use: [
           {
-            loader: 'html-loader'
-          }
-        ]
+            loader: 'html-loader',
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      }
-    ]
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './client/index.html',
-      filename: './index.html'
-    })
-  ]
+      filename: './index.html',
+    }),
+  ],
 };
