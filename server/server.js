@@ -26,14 +26,22 @@ io.on('connection', socket => {
     console.log('user disconnected');
   });
 
-  // Join room when 'room' event is emitted
-  socket.on('room', data => {
+  // Join data.room when 'room' event is emitted
+  socket.on('join room', data => {
     socket.join(data.room, err => {
       if (err) console.error(err);
     });
     console.log(`User ${socket.id} joined room ${data.room}`);
     console.log(io.sockets.adapter.rooms);
   });
+
+  socket.on('leave room', data => {
+    socket.join(data.room, err =>{
+      if (err) console.error(err);
+    });
+    console.log(`User ${socket.id} joined room ${data.room}`)
+    
+  })
 
   // TODO: Handle leave room event when user switches room
 
