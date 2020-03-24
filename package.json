@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "dev": "cross-env NODE_ENV=production concurrently \"webpack-dev-server --open\" \"nodemon server/server.js\"",
-    "prestart": "cross-env NODE_ENV=production webpack"
+    "prestart": "cross-env NODE_ENV=production webpack",
+    "test": "jest"
   },
   "license": "ISC",
   "dependencies": {
@@ -14,6 +15,7 @@
     "codemirror": "^5.52.0",
     "context-eval": "^0.1.0",
     "express": "^4.17.1",
+    "jest": "^25.1.0",
     "node-sass": "^4.13.1",
     "pg": "^7.18.2",
     "react": "^16.13.0",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
+    "@babel/plugin-transform-async-to-generator": "^7.8.3",
     "@babel/preset-env": "^7.8.7",
     "@babel/preset-react": "^7.8.3",
     "babel-loader": "^8.0.6",

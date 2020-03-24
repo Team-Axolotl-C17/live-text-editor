@@ -20,11 +20,17 @@ class EditorContainer extends Component {
     this.updateCodeinState = this.updateCodeinState.bind(this);
     this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
     this.runCode = this.runCode.bind(this);
+    this.joinRoom = this.joinRoom.bind(this);
   }
 
   // emit 'room' event when component mounts
   componentDidMount() {
-    socket.emit('room', { room: this.state.room });
+    //socket.emit('join room', { room: this.state.room });
+  }
+  // TEST: emit 'room' event upon click
+  joinRoom(e) {
+    console.log('joinroom', e.target);
+    //socket.emit('join room', { room: this.state.room });
   }
 
   // TODO: add logic for switching rooms (need to implement in UI first)
@@ -55,6 +61,8 @@ class EditorContainer extends Component {
     return (
       <div>
         <h1>Current Room: {this.state.room}</h1>
+        <button onClick={(e) => this.joinRoom(e)}>Room 1</button>
+        <button onClick={(e) => this.joinRoom(e)}>Room 2</button>
         <Editor
           code={this.state.code}
           room={this.state.room}
