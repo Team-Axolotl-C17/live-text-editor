@@ -24,7 +24,7 @@ class EditorContainer extends Component {
     this.displayCode = this.displayCode.bind(this);
     this.runCode = this.runCode.bind(this);
     this.joinRoom = this.joinRoom.bind(this);
-    this.leave = this.leaveRoom.bind(this);
+    this.leaveRoom = this.leaveRoom.bind(this);
   }
 
   // emit 'room' event when component mounts
