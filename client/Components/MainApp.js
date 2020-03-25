@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import EditorContainer from '../Containers/Editor-Container';
+import ViewerContainer from '../Containers/Viewer-Container';
 import DocsContainer from '../Containers/Docs-Container';
 import UserContainer from '../Containers/User-Container';
 import auth from "./auth";
@@ -8,8 +9,8 @@ class MainApp extends Component {
 	constructor() {
     super();
     this.state = {
-      value: '',
-      room: 'Axolotl'
+      value:'',
+      room: ['Axolotl', 'Axolotl2']
     };
   }
 	render(){
@@ -21,10 +22,10 @@ class MainApp extends Component {
         <h1>Current Room: {this.state.room}</h1>
         <div className = 'editor'>
           <div className = 'editor-container'>
-          <EditorContainer value ={this.state.value} />
+          <EditorContainer id = 'main-editor'  rooms = {this.state.room} value = {this.state.value} />
           </div>
           <div className = 'editor-container'>
-          <EditorContainer value ={this.state.value} />
+          <ViewerContainer id = 'view-screen' rooms = {this.state.room} value = {this.state.value}  />
           </div>
         </div>
 				<UserContainer />

@@ -6,12 +6,11 @@ const socket = io('localhost:3000');
 class EditorContainer extends Component {
   // Temporarily placing socket logic inside this container component
   // Can move elsewhere when refactoring, but note that socket logic needs to be handled in a single place
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       code: 'Start coding!',
       consoleOutput: 'Console output will display here',
-      editor: props.editorarray,
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', payload => {
@@ -24,7 +23,9 @@ class EditorContainer extends Component {
 
   // emit 'room' event when component mounts
   componentDidMount() {
-    socket.emit('room', { room: this.state.room });
+    console.log(this.props.rooms);
+
+    socket.emit('room', { room: this.props.rooms[0] });
   }
 
   // TODO: add logic for switching rooms (need to implement in UI first)
@@ -34,7 +35,7 @@ class EditorContainer extends Component {
   updateCodeinState(text) {
     this.setState({ code: text }, () => console.log(this.state.code));
     socket.emit('coding', {
-      room: this.state.room,
+      room: this.props.rooms[1],
       newCode: text
     });
   }
@@ -56,7 +57,6 @@ class EditorContainer extends Component {
       <div>
         <Editor
           code={this.state.code}
-          room={this.state.room}
           updateCodeinState={this.updateCodeinState.bind(this)}
           runCode={this.runCode}
           consoleOutput={this.state.consoleOutput}
