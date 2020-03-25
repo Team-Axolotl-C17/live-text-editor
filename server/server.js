@@ -1,13 +1,13 @@
 const express = require('express');
 const path = require('path');
-const socket = require('socket.io');
 const app = express();
-const userController = require('./controllers/userController');
+const userController = require('./middleware/userController');
 const PORT = 3000;
-const webpack = require('webpack');
-const webpackConfig = require('../webpack.config.js');
 
-const compiler = webpack(webpackConfig);
+
+// Handle parsing request body
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 /*  MongoDB Connection Logic */
 const mongoose = require('mongoose');
@@ -20,15 +20,21 @@ mongoose
 
 
 
+/* Webpack/ Webpack Compiler */
+
+const webpack = require('webpack');
+const webpackConfig = require('../webpack.config.js');
+const compiler = webpack(webpackConfig);
+
 app.use(require('webpack-dev-middleware')(compiler, {
   noInfo: true, publicPath: webpackConfig.output.publicPath, stats: { colors: true }
 }));
 app.use(require('webpack-hot-middleware')(compiler));
 
-const server = app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
 
+/* Socket Logic */
+
+const socket = require('socket.io');
 const io = socket(server);
 const lastBroadcastedCode = {}; // maintains object of lastBroadcastedCode, to serve to a client newly joining the room
 
@@ -68,34 +74,28 @@ io.on('connection', socket => {
   });
 });
 
-// Handle parsing request body
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-// Handle requests for client files
-// app.use(express.static(path.resolve(__dirname, '../client')));
+/* Endpoint logic / Routes */
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/index.html'));
 });
-// serve build files in production
-// if (process.env.NODE_ENV === 'production') {
-//   app.use('/build', express.static(path.join(__dirname, '../build')));
-//   app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../index.html'));
-//   });
-// }
 
-// Define route handlers
+
+// Route handlers that uses postgres
 app.get('/secret', function(req, res) {
   res.send('The password is potato');
 });
 app.post('/register', userController.createUser, (req, res) => {
   return res.status(200).send('Successful add to database');
 });
-app.post('/login', userController.loginUser, (req, res) => {
+app.post('/login', userController.loginUser,  (req, res) => {
   return res.status(200).json('Successful login');
 });
+
+
+// MongoDB routes / middleware
+
+
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -109,4 +109,10 @@ app.use((err, req, res, next) => {
     const errorObj = Object.assign(defaultErr, err);
     res.status(errorObj.status).json(errorObj.message);
   }
+});
+
+// Listens and checks if the server is running or not
+
+const server = app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
