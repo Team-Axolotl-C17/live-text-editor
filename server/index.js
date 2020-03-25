@@ -54,6 +54,7 @@ app.use((err, req, res, next) => {
 const onlineUsers = {};
 let roomsInUse = [];
 let finRoom = {};
+let roomCode = {};
 
 // test for connection
 const io = socketServer(server);
@@ -83,6 +84,15 @@ io.on('connection', (socket) => {
       if (currentRoom) socket.leave(currentRoom);
 
       currentRoom = data.room;
+      console.log('current rooms code:');
+      console.log(roomCode[currentRoom]);
+
+      if (roomCode[currentRoom] === undefined) {
+        roomCode[currentRoom] = 'helo';
+      }
+
+      io.to(socket.id).emit('code sent from server', roomCode[currentRoom]);
+
       updateRooms();
     });
   });
@@ -129,6 +139,7 @@ io.on('connection', (socket) => {
 
   // handle coding event
   socket.on('coding', (data) => {
+    roomCode[currentRoom] = data;
     // console.log(data);
     socket.broadcast.to(data.room).emit('code sent from server', data);
   });
