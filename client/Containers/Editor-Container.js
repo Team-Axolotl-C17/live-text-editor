@@ -20,6 +20,7 @@ class EditorContainer extends Component {
     this.updateCodeinState = this.updateCodeinState.bind(this);
     this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
     this.runCode = this.runCode.bind(this);
+    this.clicked = this.clicked.bind(this);
   }
 
   // emit 'room' event when component mounts
@@ -50,11 +51,20 @@ class EditorContainer extends Component {
     );
   }
 
+  clicked() {
+    socket.emit('room', {
+      room: this.refs.room.value,
+    });
+    this.setState({ room: this.refs.room.value });
+  }
+
   // TODO: Update the state to match what other clients have already put there.
   render() {
     return (
       <div>
         <h1>Current Room: {this.state.room}</h1>
+        <input ref="room" type="text" />
+        <button onClick={this.clicked}>Create/Join Room</button>
         <Editor
           code={this.state.code}
           room={this.state.room}
