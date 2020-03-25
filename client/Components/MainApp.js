@@ -14,7 +14,7 @@ class MainApp extends Component {
 	render(){
   return (
     <div>
-      <h1>Main App</h1>
+      <h1>Main App !!</h1>
       <div>
 				<DocsContainer />
 				<EditorContainer value={this.state.value} />
