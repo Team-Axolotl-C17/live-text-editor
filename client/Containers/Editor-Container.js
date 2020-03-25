@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import Editor from '../Components/Editor';
-import auth from '../Components/auth';
+import auth from '../Components/Auth';
 
 const socket = io('http://localhost:3000/');
 

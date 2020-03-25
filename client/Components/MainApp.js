@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import EditorContainer from '../Containers/Editor-Container';
 import DocsContainer from '../Containers/Docs-Container';
 import UserContainer from '../Containers/User-Container';
-import auth from './auth';
+import auth from './Auth';
 
 class MainApp extends Component {
   constructor() {

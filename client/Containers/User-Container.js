@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import UserDisplay from '../Components/User-Display';
 import User from '../Components/User';
 
