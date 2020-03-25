@@ -1,6 +1,5 @@
 const supertest = require("supertest");
-const assert = require('assert');
-const app = require('../server/server.js');
+const app = "localhost:3000";
 
 describe("GET /", function() {
   it("it should has status code 200", function(done) {
