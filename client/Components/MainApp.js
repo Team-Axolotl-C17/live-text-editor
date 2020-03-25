@@ -5,18 +5,19 @@ import DocsContainer from '../Containers/Docs-Container';
 import UserContainer from '../Containers/User-Container';
 import auth from "./auth";
 import io from 'socket.io-client';
-const socket = io('localhost:3000');
+const socket = io('localhost:3000'); // make connection from client side to 3000
 
 class MainApp extends Component {
 	constructor() {
     super();
     this.state = {
-      value:'',
       room: 'Axolotl',
-      code: 'Start coding', // code that user edits; will be emitted TO other sockets
-      viewerCode: '' // code in right container that will be updated FROM other sockets
+      code: 'Start coding', // code that user edits on (left) Editor-Container; will be emitted TO other sockets
+      viewerCode: '' // code displayed in (right) Viewer-Container that will be updated FROM other sockets
     };
-    // Listen for 'code sent from server'
+
+
+    // Listen for 'code sent from server', which is emitted from the server socket when a 'coding' event is detected 
     socket.on('code sent from server', payload => {
       this.updateCodeFromSockets(payload);
     });
@@ -24,14 +25,14 @@ class MainApp extends Component {
     this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
   }
 
-   // emit 'room' event when component mounts
+   // Emits 'room' event, sending this.state.room to the socket in the server when component mounts
+   // socket on server.js is listening for this 'room' event
   componentDidMount() {
-    console.log(this.props.rooms);
-
     socket.emit('room', { room: this.state.room });
   }
 
-    // Handle local state updates
+  // Handle local state updates - changes code in state from user typed input (is  prop drilled down to Editor.js which reads in the user input value)
+  // Emits a 'coding' event which socket on server.js is listening for and sends current room and text input
   updateCodeinState(text) {
     this.setState({ code: text }, () => console.log(this.state.code));
     socket.emit('coding', {
@@ -41,6 +42,7 @@ class MainApp extends Component {
   }
 
   // Update local state to match text input from other clients
+  // Reconfigured to update viewerCode in state rather than code in state to reflect code displayed on Viewer-Container, rather than own screen in Editor-Container
   updateCodeFromSockets(payload) {
     this.setState({ viewerCode: payload.newCode });
   }
@@ -55,15 +57,11 @@ class MainApp extends Component {
         <div className = 'editor'>
           <div className = 'editor-container'>
           <EditorContainer id = 'main-editor'  
-            rooms = {this.state.room} 
-            value = {this.state.value}
             code = {this.state.code}
             updateCodeinState = {this.updateCodeinState} />
           </div>
           <div className = 'editor-container'>
           <ViewerContainer id = 'view-screen' 
-          rooms = {this.state.room} 
-          value = {this.state.value}
           code = {this.state.viewerCode}  />
           </div>
         </div>

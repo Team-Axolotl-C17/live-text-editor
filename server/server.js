@@ -8,16 +8,16 @@ const PORT = 3000;
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
+// initialize socket io to work on server
 const io = socket(server);
 
-// test for connection
+// test for connection - listens for event called connection from browser
 io.on('connection', socket => {
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 
-  // Join room when 'room' event is emitted
+  // Join room when 'room' event is emitted; receives this.state.room from the client socket
   socket.on('room', data => {
     socket.join(data.room, err => {
       if (err) console.error(err);
@@ -28,7 +28,7 @@ io.on('connection', socket => {
 
   // TODO: Handle leave room event when user switches room
 
-  // handle coding event
+  // handle coding event - emits user input code received from client socket to the room received from data sent by client socket
   socket.on('coding', data => {
     console.log(data);
     socket.broadcast.to(data.room).emit('code sent from server', data);
