@@ -9,41 +9,41 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: 'Start coding!',
+      //code: 'Start coding!',
       consoleOutput: 'Console output will display here',
     };
-    // Listen for 'code sent from server'
-    socket.on('code sent from server', payload => {
-      this.updateCodeFromSockets(payload);
-    });
-    this.updateCodeinState = this.updateCodeinState.bind(this);
-    this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
+    // // Listen for 'code sent from server'
+    // socket.on('code sent from server', payload => {
+    //   this.updateCodeFromSockets(payload);
+    // });
+    // this.updateCodeinState = this.updateCodeinState.bind(this);
+    // this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
     this.runCode = this.runCode.bind(this);
   }
 
-  // emit 'room' event when component mounts
-  componentDidMount() {
-    console.log(this.props.rooms);
+  // // emit 'room' event when component mounts
+  // componentDidMount() {
+  //   console.log(this.props.rooms);
 
-    socket.emit('room', { room: this.props.rooms[0] });
-  }
+  //   socket.emit('room', { room: this.props.rooms[0] });
+  // }
 
   // TODO: add logic for switching rooms (need to implement in UI first)
   // Use in editorDidMount?
 
-  // Handle local state updates
-  updateCodeinState(text) {
-    this.setState({ code: text }, () => console.log(this.state.code));
-    socket.emit('coding', {
-      room: this.props.rooms[1],
-      newCode: text
-    });
-  }
+  // // Handle local state updates
+  // updateCodeinState(text) {
+  //   this.setState({ code: text }, () => console.log(this.state.code));
+  //   socket.emit('coding', {
+  //     room: this.props.rooms[1],
+  //     newCode: text
+  //   });
+  // }
 
-  // Update local state to match text input from other clients
-  updateCodeFromSockets(payload) {
-    this.setState({ code: payload.newCode });
-  }
+  // // Update local state to match text input from other clients
+  // updateCodeFromSockets(payload) {
+  //   this.setState({ code: payload.newCode });
+  // }
 
   runCode(code) {
     this.setState({ consoleOutput: eval(code) }, () =>
@@ -56,8 +56,8 @@ class EditorContainer extends Component {
     return (
       <div>
         <Editor
-          code={this.state.code}
-          updateCodeinState={this.updateCodeinState.bind(this)}
+          code={this.props.code}
+          updateCodeinState={this.props.updateCodeinState}
           runCode={this.runCode}
           consoleOutput={this.state.consoleOutput}
         />

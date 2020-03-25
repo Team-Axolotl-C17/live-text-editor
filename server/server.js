@@ -41,7 +41,7 @@ app.use(express.json());
 
 // Handle requests for client files
 //app.use(express.static(path.resolve(__dirname, '../client')));
-app.use('/dist', express.static(path.resolve(__dirname, '../dist')));
+app.use(express.static(path.resolve(__dirname, '../dist')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });

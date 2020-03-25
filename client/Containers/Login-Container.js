@@ -50,7 +50,7 @@ class LoginContainer extends Component {
   render() {
     return (
       <div className='Modal'>
-        <h2>LOGIN</h2>
+        <h2>LOGIN  :)))</h2>
         <Logo/>
         <form onSubmit={this.clickHandler}>
           <Input
