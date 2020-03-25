@@ -3,8 +3,6 @@ import auth from '../Components/auth';
 import Input from '../Components/Input';
 import Logo from '../Components/Logo';
 import { Link } from 'react-router-dom';
-import io from 'socket.io-client';
-const socket = io('http://localhost:3000/');
 
 class LoginContainer extends Component {
   constructor() {
@@ -34,21 +32,22 @@ class LoginContainer extends Component {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state),
-    }).then((res) => {
-      if (res.status === 401) {
-        this.setState({
-          warning: 'username and password do not match please try again',
-        });
-      } else if (res.status === 406) {
-        this.setState({ warning: 'username is not found try again' });
-        this.props.history.push('/login');
-      } else {
-        socket.emit('username', this.state.username);
+    })
+      .then((res) => {
+        if (res.status === 401) {
+          this.setState({
+            warning: 'username and password do not match please try again',
+          });
+        } else if (res.status === 406) {
+          this.setState({ warning: 'username is not found try again' });
+          this.props.history.push('/login');
+        } else return res.json();
+      })
+      .then(({ username }) => {
         auth.login(() => {
           this.props.history.push('/');
-        });
-      }
-    });
+        }, username);
+      });
   }
 
   render() {

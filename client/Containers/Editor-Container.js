@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import Editor from '../Components/Editor';
+import auth from '../Components/auth';
+
 const socket = io('http://localhost:3000/');
 
 class EditorContainer extends Component {
@@ -12,6 +14,7 @@ class EditorContainer extends Component {
       code: 'Start coding!',
       consoleOutput: 'Console output will display here',
       room: 'Axolotl',
+      username: auth.getUsername(),
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', (payload) => {
@@ -25,6 +28,7 @@ class EditorContainer extends Component {
 
   // emit 'room' event when component mounts
   componentDidMount() {
+    socket.emit('username', this.state.username);
     socket.emit('room', { room: this.state.room });
   }
 

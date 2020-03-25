@@ -62,17 +62,17 @@ io.on('connection', (socket) => {
 
   // const { address, port } = socket.request.connection._peername;
   console.log(`User Connected [ ${socket.id} ]`);
-  onlineUsers[socket.id] = 'jeff';
+  onlineUsers[socket.id] = 'defaultUsername';
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    updateRooms();
   });
 
   let username;
   socket.on('username', (un) => {
     username = un;
     onlineUsers[socket.id] = username;
-    console.log('USERNAME SET FOR: ', socket.id);
   });
   let currentRoom;
 
@@ -83,36 +83,47 @@ io.on('connection', (socket) => {
       if (currentRoom) socket.leave(currentRoom);
 
       currentRoom = data.room;
-
-      // declare globally all rooms that have someone using it
-      console.log('Rooms:');
-      console.log(io.sockets.adapter.rooms);
-      roomsInUse = Object.keys(io.sockets.adapter.rooms).filter((key) => {
-        console.log(key);
-        console.log(onlineUsers[key]);
-        return onlineUsers[key] === undefined;
-      });
-
-      roomsInUse.forEach((room) => {
-        // Get each socket id from room
-        const arr = [];
-        Object.keys(io.sockets.adapter.rooms[room].sockets).forEach((sid) => {
-          // push usernames into an array
-          // console.log('SID');
-          // console.log(sid);
-          // console.log(onlineUsers);
-          arr.push(onlineUsers[sid]);
-        });
-        finRoom[room] = arr;
-      });
-      // console.log(finRoom);
-
-      // console.log('Rooms in use: ', roomsInUse);
-      // console.log(`User ${socket.id} joined room ${data.room}`);
-      console.log(roomsInUse);
-      // console.log(io.sockets.adapter.rooms);
+      updateRooms();
     });
   });
+
+  function updateRooms() {
+    // declare globally all rooms that have someone using it
+    console.log('Rooms:');
+    console.log(io.sockets.adapter.rooms);
+    roomsInUse = Object.keys(io.sockets.adapter.rooms).filter((key) => {
+      // console.log(key);
+      // console.log(onlineUsers[key]);
+      return onlineUsers[key] === undefined;
+    });
+
+    finRoom = {};
+    roomsInUse.forEach((room) => {
+      // Get each socket id from room
+      const arr = [];
+      Object.keys(io.sockets.adapter.rooms[room].sockets).forEach((sid) => {
+        // push usernames into an array
+        // console.log('SID');
+        // console.log(sid);
+        // console.log(onlineUsers);
+        arr.push(onlineUsers[sid]);
+      });
+      finRoom[room] = arr;
+    });
+    console.log('USERS IN ROOMS:');
+    console.log(finRoom);
+
+    // update current user in user's room
+    socket.to(currentRoom).emit('currentUsers', finRoom[currentRoom]);
+
+    // send all available rooms to all users
+    socket.emit('availableRooms', roomsInUse);
+
+    // console.log('Rooms in use: ', roomsInUse);
+    // console.log(`User ${socket.id} joined room ${data.room}`);
+    console.log(roomsInUse);
+    // console.log(io.sockets.adapter.rooms);
+  }
 
   // TODO: Handle leave room event when user switches room
 
