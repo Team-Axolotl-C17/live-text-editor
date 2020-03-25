@@ -9,6 +9,21 @@
     "build": "cross-env NODE_ENV=production webpack",
     "test": "jest --verbose"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team-Axolotl-C17/live-text-editor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team-Axolotl-C17/live-text-editor/issues"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/client/"
+    ]
+  },
+  "homepage": "https://github.com/Team-Axolotl-C17/live-text-editor#readme",
   "dependencies": {
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
