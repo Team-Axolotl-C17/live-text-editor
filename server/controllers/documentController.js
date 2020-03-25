@@ -2,6 +2,7 @@ const db = require('../database/database.js');
 
 const documentController = {}
 
+// check the user's ID and save a new document in the database that has a doc_id that matches the user's _id
 documentController.saveDoc = (req, res, next) => {
     const { username, docName, docText } = req.body;
     const queryArr1 = [username,docName, docText];
@@ -19,6 +20,8 @@ documentController.saveDoc = (req, res, next) => {
           }  
     })
 } 
+
+// check the user's username, and return to the client doc_name and doc_text of all their saved documents in the database 
 documentController.retrieveDoc = (req, res, next) => {
     const { username } = req.body;
     const selectArr = [username]
