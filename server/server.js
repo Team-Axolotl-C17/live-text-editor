@@ -31,7 +31,10 @@ io.on('connection', socket => {
   socket.on('join room', clientMsg => {
     socket.join(clientMsg.room);
     if (lastBroadcastedCode[clientMsg.room] !== undefined) {
-      io.to(socket.id).emit('code sent from server', lastBroadcastedCode[clientMsg.room])
+      io.to(socket.id).emit(
+        'code sent from server', 
+        { code :lastBroadcastedCode[clientMsg.room] }
+      );
     }
  // send the last broadcasted code for the room
     console.log(`User ${socket.id} joined room "${clientMsg.room}"`);
@@ -47,7 +50,7 @@ io.on('connection', socket => {
   })
 
   socket.on('client edited code', clientMsg => {
-    socket.broadcast.to(clientMsg.room).emit('code sent from server', clientMsg.newCode);
+    socket.broadcast.to(clientMsg.room).emit('code sent from server', { code: clientMsg.newCode });
     // store last broadcasted code 
     lastBroadcastedCode[clientMsg.room] = clientMsg.newCode;
     console.log('code data being broadcasted:', { code : clientMsg.newCode });

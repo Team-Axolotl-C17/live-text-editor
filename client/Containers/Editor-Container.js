@@ -17,7 +17,7 @@ class EditorContainer extends Component {
     
     // Listen for 'code sent from server'
     socket.on('code sent from server', socketMsg => {
-      this.displayCode(socketMsg);
+      this.displayCode(socketMsg.code);
     });
     
     this.emitCode = this.emitCode.bind(this);
@@ -60,8 +60,9 @@ class EditorContainer extends Component {
 
   // Receive payload.newCode from server; update this.state.code, to be displayed on Editor
   // "payload.newCode" contains entire text that needs to be displayed in the Editor
-  displayCode(socketMsg) { // payloads are what 
-    this.setState({ code: socketMsg.code });
+  displayCode(codeFromSocket) { 
+    this.setState({ code: codeFromSocket });
+    console.log('displayCode, codeFromSocket:', codeFromSocket)
   }
 
   // 
