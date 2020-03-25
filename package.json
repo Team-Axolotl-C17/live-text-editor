@@ -19,6 +19,11 @@
   "bugs": {
     "url": "https://github.com/Team-Axolotl-C17/live-text-editor/issues"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/client/"
+    ]
+  },
   "homepage": "https://github.com/Team-Axolotl-C17/live-text-editor#readme",
   "dependencies": {
     "bcrypt": "^4.0.1",

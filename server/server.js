@@ -92,7 +92,7 @@ app.get('/secret', (req, res) => {
 });
 
 app.post('/register', userController.createUser, (req, res) => {
-  return res.status(200).send('Successful add to database');
+  return res.status(200).send('Successfully added to database');
 });
 
 app.post('/login', userController.loginUser, (req, res) => {
