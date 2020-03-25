@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/server.js",
-    "dev": "NODE_ENV=development webpack-dev-server --open --watch & nodemon server/server.js",
+    "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack-dev-server --open\"",
     "prestart": "NODE_ENV=production webpack",
     "test": "jest",
     "test:watch": "jest --watch"
@@ -24,6 +24,7 @@
     "bcrypt": "^4.0.1",
     "codemirror": "^5.52.0",
     "context-eval": "^0.1.0",
+    "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "node-sass": "^4.13.1",
     "pg": "^7.18.2",
