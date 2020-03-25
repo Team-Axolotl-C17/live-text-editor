@@ -12,8 +12,14 @@ const server = app.listen(PORT, () => {
 
 const io = socketServer(server);
 
+const onlineUsers = {};
+let roomsInUse = [];
+let finRoom = {};
+
 // test for connection
 io.on('connection', (socket) => {
+  // console.log('Online users: ', onlineUsers);
+
   const { address, port } = socket.request.connection._peername;
   console.log(`User Connected [${address}:${port}]`);
 
@@ -21,6 +27,11 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 
+  let username;
+  socket.on('username', (un) => {
+    username = un;
+    onlineUsers[socket.id] = username;
+  });
   let currentRoom;
 
   // Join room when 'room' event is emitted
@@ -30,8 +41,28 @@ io.on('connection', (socket) => {
       if (currentRoom) socket.leave(currentRoom);
 
       currentRoom = data.room;
-      console.log(`User ${socket.id} joined room ${data.room}`);
-      console.log(io.sockets.adapter.rooms);
+
+      // declare globally all rooms that have someone using it
+      roomsInUse = Object.keys(io.sockets.adapter.rooms).filter(
+        (key) => onlineUsers[key] === undefined
+      );
+
+      roomsInUse.forEach((room) => {
+        // Get each socket id from room
+        const arr = [];
+        Object.keys(io.sockets.adapter.rooms[room].sockets).forEach((sid) => {
+          // push usernames into an array
+          console.log(sid);
+          console.log(onlineUsers);
+          arr.push(onlineUsers[sid]);
+        });
+        finRoom[room] = arr;
+      });
+      console.log(finRoom);
+
+      // console.log('Rooms in use: ', roomsInUse);
+      // console.log(`User ${socket.id} joined room ${data.room}`);
+      // console.log(io.sockets.adapter.rooms);
     });
   });
 
@@ -39,7 +70,7 @@ io.on('connection', (socket) => {
 
   // handle coding event
   socket.on('coding', (data) => {
-    console.log(data);
+    // console.log(data);
     socket.broadcast.to(data.room).emit('code sent from server', data);
   });
 });
@@ -65,7 +96,7 @@ app.post('/register', userController.createUser, (req, res) => {
 });
 
 app.post('/login', userController.loginUser, (req, res) => {
-  return res.status(200).json('Successful login');
+  return res.status(200).json({ username: res.locals.username });
 });
 
 // Global error handler
