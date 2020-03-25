@@ -68,6 +68,7 @@ userController.loginUser = (req, res, next) => {
       // use bcrypt to authenticate password
       bcrypt.compare(password, data.rows[0].password, (berr, same) => {
         if (same) {
+          res.locals.username = username;
           return next();
         }
         return next({
