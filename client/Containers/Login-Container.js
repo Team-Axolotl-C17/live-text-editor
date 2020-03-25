@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import auth from '../Components/auth';
+import { Link } from 'react-router-dom';
+import auth from '../Components/Auth';
 import Input from '../Components/Input';
 import Logo from '../Components/Logo';
-import { Link } from 'react-router-dom';
 
 class LoginContainer extends Component {
   constructor() {
