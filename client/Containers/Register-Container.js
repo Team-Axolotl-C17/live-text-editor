@@ -27,7 +27,7 @@ class RegisterContainer extends Component {
   clickHandler(event) {
     event.preventDefault();
     console.log(this.state);
-    fetch('/register', {
+    fetch('/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state.user),

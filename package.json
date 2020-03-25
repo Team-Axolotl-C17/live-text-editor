@@ -1,29 +1,20 @@
 {
-  "name": "live-text-editor",
+  "name": "react-kickstart",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
-    "start": "nodemon server/server.js",
-    "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/server.js\" \"webpack-dev-server --open\"",
-    "prestart": "NODE_ENV=production webpack",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "start": "cross-env NODE_ENV=production concurrently \"node server/index.js\"",
+    "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/index.js\" \"webpack-dev-server --open\"",
+    "build": "cross-env NODE_ENV=production webpack",
+    "test": "jest --verbose"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Team-Axolotl-C17/live-text-editor.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Team-Axolotl-C17/live-text-editor/issues"
-  },
-  "homepage": "https://github.com/Team-Axolotl-C17/live-text-editor#readme",
   "dependencies": {
     "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
     "codemirror": "^5.52.0",
     "context-eval": "^0.1.0",
+    "cookie-parser": "^1.4.5",
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "node-sass": "^4.13.1",
