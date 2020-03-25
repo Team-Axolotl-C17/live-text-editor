@@ -13,7 +13,7 @@ module.exports = {
   mode: process.env.NODE_ENV,
   devServer: {
     contentBase: path.resolve(__dirname, 'client'),
-    publicPath: path.join(__dirname, '/dist/'),
+    publicPath: '/dist/',
     compress: true,
     port: 8080,
     proxy: {
