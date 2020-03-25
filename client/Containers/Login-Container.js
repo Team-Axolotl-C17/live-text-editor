@@ -21,8 +21,6 @@ class LoginContainer extends Component {
     this.setState({
       [name]: value
     });
-    console.log('username: ', this.state.username);
-    console.log('password: ', this.state.password);
   }
   
   clickHandler(event){
