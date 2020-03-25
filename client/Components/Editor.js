@@ -21,7 +21,9 @@ const Editor = props => {
         value={props.code}
         options={options}
         onBeforeChange={(editor, data, value) => {
-          props.updateCodeinState(value);
+          console.log('codemirror data', data)
+          console.log('codemirror value', value)
+          props.emitCode(value);
         }}
       />
       <button onClick={() => props.runCode(props.code)}>Run Code</button>
