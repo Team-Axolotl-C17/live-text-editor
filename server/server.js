@@ -9,6 +9,17 @@ const webpackConfig = require('../webpack.config.js');
 
 const compiler = webpack(webpackConfig);
 
+/*  MongoDB Connection Logic */
+const mongoose = require('mongoose');
+const db = require('./config/mongoKey.js').mongoURI;
+
+mongoose
+  .connect(db)
+  .then(() => console.log('We are now connected to the MongoDB'))
+  .catch(err => console.log('We have failed to connect to the MongoDB'))
+
+
+
 app.use(require('webpack-dev-middleware')(compiler, {
   noInfo: true, publicPath: webpackConfig.output.publicPath, stats: { colors: true }
 }));

@@ -13,6 +13,7 @@
     "codemirror": "^5.52.0",
     "context-eval": "^0.1.0",
     "express": "^4.17.1",
+    "mongoose": "^5.9.6",
     "node-sass": "^4.13.1",
     "pg": "^7.18.2",
     "react": "^16.13.0",
