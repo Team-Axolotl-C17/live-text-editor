@@ -13,17 +13,25 @@ const io = socket(server);
 
 // test for connection
 io.on('connection', (socket) => {
+  const { address, port } = socket.request.connection._peername;
+  console.log(`User Connected [${address}:${port}]`);
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
+
+  let currentRoom;
 
   // Join room when 'room' event is emitted
   socket.on('room', (data) => {
     socket.join(data.room, (err) => {
       if (err) console.error(err);
+      if (currentRoom) socket.leave(currentRoom);
+
+      currentRoom = data.room;
+      console.log(`User ${socket.id} joined room ${data.room}`);
+      console.log(io.sockets.adapter.rooms);
     });
-    console.log(`User ${socket.id} joined room ${data.room}`);
-    console.log(io.sockets.adapter.rooms);
   });
 
   // TODO: Handle leave room event when user switches room
@@ -54,7 +62,7 @@ app.get('/', (req, res) => {
 // }
 
 // Define route handlers
-app.get('/secret', function (req, res) {
+app.get('/secret', function(req, res) {
   res.send('The password is potato');
 });
 
