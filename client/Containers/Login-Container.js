@@ -4,7 +4,7 @@ import Input from '../Components/Input';
 import Logo from '../Components/Logo';
 import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
-const socket = io('localhost:3000');
+const socket = io('http://localhost:3000/');
 
 class LoginContainer extends Component {
   constructor() {
@@ -30,7 +30,7 @@ class LoginContainer extends Component {
   clickHandler(event) {
     event.preventDefault();
     console.log(this.state);
-    fetch('/login', {
+    fetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state),
