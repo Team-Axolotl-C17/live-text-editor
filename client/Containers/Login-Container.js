@@ -3,6 +3,8 @@ import auth from '../Components/auth';
 import Input from '../Components/Input';
 import Logo from '../Components/Logo';
 import { Link } from 'react-router-dom';
+import io from 'socket.io-client';
+const socket = io('localhost:3000');
 
 class LoginContainer extends Component {
   constructor() {
@@ -41,6 +43,7 @@ class LoginContainer extends Component {
         this.setState({ warning: 'username is not found try again' });
         this.props.history.push('/login');
       } else {
+        socket.emit('username', this.state.username);
         auth.login(() => {
           this.props.history.push('/');
         });
