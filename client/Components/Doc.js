@@ -4,7 +4,7 @@ class Doc extends Component {
   render() {
     return (
       <div>
-        <button>Document</button>
+        <button>Not a document</button>
       </div>
     );
   }

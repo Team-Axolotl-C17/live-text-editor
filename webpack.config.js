@@ -1,34 +1,25 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
-
 module.exports = {
-  // devServer: {
-  //   // contentBase: path.resolve(__dirname, 'client'),
-  //   publicPath: '/build/',
-  //   historyApiFallback: true,
-  //   proxy: {
-  //     '/users': 'http://localhost:3000'
-  //   }
-  // },
+  entry: ['./client/index.js'],
+  output: {
+    path: __dirname,
+    filename: './dist/bundle.js',
+    publicPath: '/',
+  },
   mode: process.env.NODE_ENV,
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  devtool: 'source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, 'client'),
-    publicPath: path.join(__dirname, '/dist/'),
-    compress: true,
-    port: 8080,
+    historyApiFallback: true,
     proxy: {
       '/': 'http://localhost:3000',
     },
   },
-  entry: './client/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-  },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -38,23 +29,9 @@ module.exports = {
         },
       },
       {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
+        test: /.s?[ac]ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './client/index.html',
-      filename: './index.html',
-    }),
-  ],
 };
