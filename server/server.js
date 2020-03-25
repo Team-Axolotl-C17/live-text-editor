@@ -4,6 +4,7 @@ const socket = require('socket.io');
 const app = express();
 const userController = require('./controllers/userController');
 const PORT = 3000;
+const documentController = require('./controllers/documentController');
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
@@ -63,6 +64,16 @@ app.post('/register', userController.createUser, (req, res) => {
 app.post('/login', userController.loginUser, (req, res) => {
   return res.status(200).json('Successful login');
 });
+
+// saving documents for the logged in user 
+app.post('/save', documentController.saveDoc, (req, res) => {
+  return res.status(200).json('Successfully saved')
+})
+
+// retrieving saved docs in the front-end
+app.get('/retrieve', documentController.retrieveDoc, (req, res) => {
+  return res.status(200).send(res.locals.documents)
+})
 
 // Global error handler
 app.use((err, req, res, next) => {
