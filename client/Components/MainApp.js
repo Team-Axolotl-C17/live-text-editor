@@ -8,16 +8,25 @@ class MainApp extends Component {
 	constructor() {
     super();
     this.state = {
-      value: ''
+      value: '',
+      room: 'Axolotl'
     };
   }
 	render(){
   return (
     <div>
-      <h1>Main App !!</h1>
+      <h1>Main App</h1>
       <div>
 				<DocsContainer />
-				<EditorContainer value={this.state.value} />
+        <h1>Current Room: {this.state.room}</h1>
+        <div className = 'editor'>
+          <div className = 'editor-container'>
+          <EditorContainer value ={this.state.value} />
+          </div>
+          <div className = 'editor-container'>
+          <EditorContainer value ={this.state.value} />
+          </div>
+        </div>
 				<UserContainer />
       </div>
       <button

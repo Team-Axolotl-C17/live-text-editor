@@ -6,12 +6,12 @@ const socket = io('localhost:3000');
 class EditorContainer extends Component {
   // Temporarily placing socket logic inside this container component
   // Can move elsewhere when refactoring, but note that socket logic needs to be handled in a single place
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       code: 'Start coding!',
       consoleOutput: 'Console output will display here',
-      room: 'Axolotl'
+      editor: props.editorarray,
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', payload => {
@@ -54,7 +54,6 @@ class EditorContainer extends Component {
   render() {
     return (
       <div>
-        <h1>Current Room: {this.state.room}</h1>
         <Editor
           code={this.state.code}
           room={this.state.room}
