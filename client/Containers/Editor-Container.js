@@ -10,49 +10,61 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: 'Start coding!',
+      code: '',
       consoleOutput: 'Console output will display here',
-      room: ' ' // TO DO: INSERT THE ACTUAL PROJECT/ROOM NAME HERE
+      room: null
     };
     
     // Listen for 'code sent from server'
-    socket.on('code sent from server', payload => {
-      this.updateCodeFromSockets(payload);
+    socket.on('code sent from server', socketMsg => {
+      this.displayCode(socketMsg);
     });
     
-    this.updateCodeinState = this.updateCodeinState.bind(this);
-    this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
+    this.emitCode = this.emitCode.bind(this);
+    this.displayCode = this.displayCode.bind(this);
     this.runCode = this.runCode.bind(this);
     this.joinRoom = this.joinRoom.bind(this);
+    this.leave = this.leaveRoom.bind(this);
   }
 
   // emit 'room' event when component mounts
   componentDidMount() {
     //socket.emit('join room', { room: this.state.room });
   }
-  // TEST: emit 'room' event upon click
+
+  // Join or leave a project room upon button click
   joinRoom(e) {
-    console.log('joinroom', e.target);
-    //socket.emit('join room', { room: this.state.room });
+    this.setState({ room: e.target.value });
+    socket.emit('join room', 
+      { room: e.target.value }
+    );
   }
 
-  // TODO: add logic for switching rooms (need to implement in UI first)
-  // Use in editorDidMount?
+  leaveRoom() {
+    this.setState({ room: null, code: '' });
+    socket.emit('leave room', 
+      { room: this.state.room }
+    );
+  }
 
-  // Handle local state updates
-  updateCodeinState(text) {
-    this.setState({ code: text }, () => console.log(this.state.code));
-    socket.emit('coding', {
+  // Write code & receive up-to-date code
+  emitCode(codeInLocalEditor) { 
+    // Input is (1) props.code currently being displayed in CodeMirror and (2) any changes typed by the user.
+    this.setState({ code : codeInLocalEditor }) 
+    // Rather than directly displaying any changes, changes are set in state then displayed in Editor
+    socket.emit('client edited code', {
       room: this.state.room,
-      newCode: text
+      newCode: codeInLocalEditor
     });
   }
 
-  // Update local state to match text input from other clients
-  updateCodeFromSockets(payload) {
-    this.setState({ code: payload.newCode });
+  // Receive payload.newCode from server; update this.state.code, to be displayed on Editor
+  // "payload.newCode" contains entire text that needs to be displayed in the Editor
+  displayCode(socketMsg) { // payloads are what 
+    this.setState({ code: socketMsg.code });
   }
 
+  // 
   runCode(code) {
     this.setState({ consoleOutput: eval(code) }, () =>
       console.log(this.state.consoleOutput)
@@ -64,12 +76,13 @@ class EditorContainer extends Component {
     return (
       <div>
         <h1>Current Room: {this.state.room}</h1>
-        <button onClick={(e) => this.joinRoom(e)}>Room 1</button>
-        <button onClick={(e) => this.joinRoom(e)}>Room 2</button>
+        <button value='Project1' onClick={(e) => this.joinRoom(e)}>Project1</button>
+        <button value='Project2' onClick={(e) => this.joinRoom(e)}>Project2</button>
+        <button onClick={(e) => this.leaveRoom(e)}>Leave Project</button>
         <Editor
           code={this.state.code}
           room={this.state.room}
-          updateCodeinState={this.updateCodeinState.bind(this)}
+          emitCode={this.emitCode.bind(this)}
           runCode={this.runCode}
           consoleOutput={this.state.consoleOutput}
         />

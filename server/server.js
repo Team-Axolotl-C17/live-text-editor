@@ -19,6 +19,7 @@ const server = app.listen(PORT, () => {
 });
 
 const io = socket(server);
+const lastBroadcastedCode = {}; // maintains object of lastBroadcastedCode, to serve to a client newly joining the room
 
 // test for connection
 io.on('connection', socket => {
@@ -27,28 +28,29 @@ io.on('connection', socket => {
   });
 
   // Join data.room when 'room' event is emitted
-  socket.on('join room', data => {
-    socket.join(data.room, err => {
-      if (err) console.error(err);
-    });
-    console.log(`User ${socket.id} joined room ${data.room}`);
-    console.log(io.sockets.adapter.rooms);
+  socket.on('join room', clientMsg => {
+    socket.join(clientMsg.room);
+    if (lastBroadcastedCode[clientMsg.room] !== undefined) {
+      io.to(socket.id).emit('code sent from server', lastBroadcastedCode[clientMsg.room])
+    }
+ // send the last broadcasted code for the room
+    console.log(`User ${socket.id} joined room "${clientMsg.room}"`);
+    console.log(`lastBroadcastedCode: ${lastBroadcastedCode[clientMsg.room]}`)
   });
 
-  socket.on('leave room', data => {
-    socket.join(data.room, err =>{
+  // TODO: Handle leave room event when user switches room
+  socket.on('leave room', clientMsg => {
+    socket.leave(clientMsg.room, err =>{
       if (err) console.error(err);
     });
-    console.log(`User ${socket.id} joined room ${data.room}`)
-    
+    console.log(`User ${socket.id} left room "${clientMsg.room}"`)
   })
 
-  // TODO: Handle leave room event when user switches room
-
-  // handle coding event
-  socket.on('coding', data => {
-    console.log(data);
-    socket.broadcast.to(data.room).emit('code sent from server', data);
+  socket.on('client edited code', clientMsg => {
+    socket.broadcast.to(clientMsg.room).emit('code sent from server', clientMsg.newCode);
+    // store last broadcasted code 
+    lastBroadcastedCode[clientMsg.room] = clientMsg.newCode;
+    console.log('code data being broadcasted:', { code : clientMsg.newCode });
   });
 });
 

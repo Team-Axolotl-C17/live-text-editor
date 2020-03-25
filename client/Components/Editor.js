@@ -21,7 +21,7 @@ const Editor = props => {
         value={props.code}
         options={options}
         onBeforeChange={(editor, data, value) => {
-          props.updateCodeinState(value);
+          props.emitCode(value);
         }}
       />
       <button onClick={() => props.runCode(props.code)}>Run Code</button>
