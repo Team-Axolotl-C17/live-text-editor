@@ -1,15 +1,16 @@
 const express = require('express');
 const path = require('path');
-const socket = require('socket.io');
-const app = express();
+const socketServer = require('socket.io');
 const userController = require('./controllers/userController');
+
+const app = express();
 const PORT = 3000;
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
-const io = socket(server);
+const io = socketServer(server);
 
 // test for connection
 io.on('connection', (socket) => {
@@ -53,16 +54,9 @@ app.use(express.static(path.resolve(__dirname, '../dist')));
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/index.html'));
 });
-// serve build files in production
-// if (process.env.NODE_ENV === 'production') {
-//   app.use('/build', express.static(path.join(__dirname, '../build')));
-//   app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../index.html'));
-//   });
-// }
 
 // Define route handlers
-app.get('/secret', function(req, res) {
+app.get('/secret', (req, res) => {
   res.send('The password is potato');
 });
 
