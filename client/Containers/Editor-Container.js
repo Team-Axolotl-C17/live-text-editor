@@ -31,8 +31,6 @@ class EditorContainer extends Component {
 
   // emit 'room' event when component mounts
   componentDidMount() {
-    console.log('hi')
-    console.log('username', this.props.username)
     fetch('/getProjects', {
       method: 'POST',
       body: JSON.stringify({
@@ -43,8 +41,9 @@ class EditorContainer extends Component {
       return res.json();
     })
     .then(json => {
-      this.setState({ roomOptions : json });
+      console.log('hello');
       console.log(json)
+      this.setState({ roomOptions : json });
     })
   }
 
