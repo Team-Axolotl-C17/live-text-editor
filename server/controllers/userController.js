@@ -12,7 +12,7 @@ userController.createUser = (req, res, next) => {
   db.query(queryString, queryArr1, (err, data) => {
     if (err) {
       return next({
-          log: 'An error has occurred in createUser',
+          log: 'An error has occurred in createUser1',
           status: 400,
           err: { err },
       });
@@ -36,7 +36,7 @@ userController.createUser = (req, res, next) => {
                   db.query(queryStr, queryArr2, (err, data) => {
                     if (err) {
                       return next({
-                          log: 'An error has occurred in createUser',
+                          log: 'An error has occurred in createUser2',
                           status: 400,
                           err: { err },
                       });
@@ -84,6 +84,5 @@ userController.loginUser = (req, res, next) => {
       }
   })
 }
-
 
 module.exports = userController;
