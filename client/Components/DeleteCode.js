@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
-class Doc extends Component {
+class DeleteCode extends Component {
     constructor() {
-        super();
+        super()
     }
-
     render() {
         return (
             <div>
-                <button>Document</button>
+                <button>Delete Code</button>
             </div>
         )
     }
-}
+};
 
-export default Doc;
+export default DeleteCode;

@@ -7,7 +7,10 @@ class RegisterContainer extends Component {
   constructor() {
     super();
     this.state = {
-      user: { username: '',
+      user: { 
+              firstname: '',
+              lastname: '',
+              username: '',
               password: '',
       }, 
       msg: ''
@@ -22,6 +25,8 @@ class RegisterContainer extends Component {
     this.setState({
       user: {...user, [name]: value}
     });
+    console.log('firstname: ', this.state.user.firstname);
+    console.log('last name: ', this.state.user.lastname);
     console.log('username: ', this.state.user.username);
     console.log('password: ', this.state.user.password);
   }
@@ -54,6 +59,20 @@ class RegisterContainer extends Component {
         <h2>REGISTER</h2>
         <Logo/>
         <form onSubmit={this.clickHandler}>
+        <Input
+            type='text' 
+            value={this.state.user.firstname} 
+            name='firstname' 
+            onChange={this.handleInputChange} 
+            placeholder='firstname' 
+          />
+          <Input
+            type='text' 
+            value={this.state.user.lastname} 
+            name='lastname' 
+            onChange={this.handleInputChange} 
+            placeholder='lastname' 
+          />
           <Input
             type='text' 
             value={this.state.user.username} 

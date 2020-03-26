@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DocsDisplay from '../Components/Docs-Display';
 import Doc from '../Components/Doc';
+import GetCode from '../Components/GetCode'; 
 
 class DocsContainer extends Component {
     constructor(){
@@ -10,10 +11,6 @@ class DocsContainer extends Component {
     render() {
         return (
             <div>
-                <DocsDisplay />
-                <Doc />
-                <Doc />
-                <Doc />
             </div>
         )
     }

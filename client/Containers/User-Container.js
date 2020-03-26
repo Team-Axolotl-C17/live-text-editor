@@ -13,8 +13,6 @@ class UserContainer extends Component {
             <div>
                 <UserDisplay />
                 <User />
-                <User />
-                <User />
             </div>
         )
     }

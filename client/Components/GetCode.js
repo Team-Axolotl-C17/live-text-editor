@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
-class Doc extends Component {
+class GetCode extends Component {
     constructor() {
-        super();
+        super()
     }
-
     render() {
         return (
             <div>
-                <button>Document</button>
+            <button>Get Code</button>
             </div>
         )
     }
 }
 
-export default Doc;
+export default GetCode; 

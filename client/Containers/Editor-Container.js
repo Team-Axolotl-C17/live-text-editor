@@ -11,7 +11,7 @@ class EditorContainer extends Component {
     this.state = {
       code: 'Start coding!',
       consoleOutput: 'Console output will display here',
-      room: 'Axolotl'
+      room: 'Panda Whale'
     };
     // Listen for 'code sent from server'
     socket.on('code sent from server', payload => {
