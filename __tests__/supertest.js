@@ -1,13 +1,21 @@
 const request = require('supertest');
 const server = 'http://localhost:3000';
 
-const mockDocument = {
-    username: 'TDBank',
-    docName: 'bank docs',
-    docText: 'document info'
+const mockUser = {
+    username: "MockUser", 
+    password: "hello"
 }
 
-describe('Route integration for saving documents', () => {
+const mockDocument = {
+    username: 'MockUser',
+    docName: 'testDocName',
+    docText: 'testDocText',
+}
+
+let mockDocID;
+
+describe('Route integration', () => {
+    //get static file
     describe('/', () => {
         describe('GET', () => {
             it('responds with 200 status and text/html content type', () => {
@@ -18,7 +26,22 @@ describe('Route integration for saving documents', () => {
             })
         })
     })
-
+    //Save user to DB
+    describe('/register',() => {
+        describe('POST', () => {
+            it('adds the user to the database', () => {
+                return request(server)
+                    .post('/register')
+                    .send(mockUser)
+                    .expect('Content-Type', /application\/json/)
+                    .expect(200)
+                    .then( res => {
+                        expect(res.body).toEqual('Successful add to database')
+                    })
+            })
+        })
+    })
+    //save a document for user
     describe('/save', () => {
         describe('POST', () => {
             it('responds with 200 status and application/json content type', () => {
@@ -33,48 +56,55 @@ describe('Route integration for saving documents', () => {
             })
         })
     })
-
+    //retive document
     describe('/retrieve', () => {
         describe('GET', () => {
             it('responds with 200 status and application/json content type', () => {
                 return request(server)
                     .get('/retrieve')
-                    .send({"username": "Taylor"})
+                    .send({"username": "MockUser"})
                     .expect('Content-Type', /application\/json/)
                     .expect(200)
-                    .then( res => {
-                        expect(res.body).toEqual([
-                            { doc_name: 'Golden', doc_text: 'Retriever' },
-                            { doc_name: 'golden', doc_text: 'retriever' },
-                            { doc_name: 'golden', doc_text: 'retriever' },
-                            { doc_name: 'golden', doc_text: 'retriever' }
-                          ])
+                    .then(res => {
+                        mockDocID = res.body[0]._id
+                        console.log(res.body[0]._id)
+                        expect(Array.isArray(res.body)).toEqual(true)
                     })
                     
             })
         })
     })
-})
-
-// const mockUser = {
-//     username: "MockUser", 
-//     password: "hello"
-// }
-
-
-describe('Route integration for userController', () => {
-    describe('/register',() => {
-        describe('POST', () => {
-            it('adds the user to the database', () => {
+    //delete document
+    describe('/deletedoc', () => {
+        describe('DELETE', () => {
+            it('deletes document from the database', () => {
                 return request(server)
-                    .post('/register')
-                    // .send(mockUser)
+                    .delete('/deletedoc')
+                    .send({'id': mockDocID})
                     .expect('Content-Type', /application\/json/)
                     .expect(200)
-                    .then( res => {
-                        expect(res.body).toEqual('Successful add to database')
+                    .then (res => {
+                        expect(res.body).toEqual("Document successfully deleted")
                     })
             })
         })
     })
+    //delete user
+    describe('/deleteuser', () => {
+        describe('DELETE', () => {
+            it('deletes user from the database', () => {
+                return request(server)
+                    .delete('/deleteuser')
+                    .send({'username': 'MockUser'})
+                    .expect('Content-Type', /application\/json/)
+                    .expect(200)
+                    .then (res => {
+                        expect(res.body).toEqual("Successfully deleted the user")
+                    })
+            })
+        })
+    })
+    
 })
+
+
