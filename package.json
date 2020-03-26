@@ -7,8 +7,8 @@
     "start": "cross-env NODE_ENV=production concurrently \"node server/index.js\"",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/index.js\" \"webpack-dev-server --open\"",
     "build": "cross-env NODE_ENV=production webpack",
-    "test": "jest --verbose",
-    "watch": "jest --watch"
+    "test": "jest --verbose --testPathIgnorePatterns client/assets",
+    "watch": "jest --watchAll --testPathIgnorePatterns client/assets"
   },
   "repository": {
     "type": "git",
@@ -17,11 +17,6 @@
   "author": "",
   "bugs": {
     "url": "https://github.com/CatSnake17/live-text-editor/issues"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>/client/"
-    ]
   },
   "homepage": "https://github.com/CatSnake17/live-text-editor#readme",
   "dependencies": {
