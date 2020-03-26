@@ -26,7 +26,10 @@ describe('Route integration', () => {
                     .post('/save')
                     .send(mockDocument)
                     .expect('Content-Type', /application\/json/)
-                    .expect(200)
+                    .expect(200)   
+                    .expect(function(res){
+                        res.body 
+                     })
             })
         })
     })
