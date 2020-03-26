@@ -1,22 +1,21 @@
 import React, { Component } from "react";
 import EditorContainer from '../Containers/Editor-Container';
-import UserContainer from '../Containers/User-Container';
 import auth from "./auth";
 
 class MainApp extends Component {
 	constructor() {
     super();
     this.state = {
-      value: ''
+      value: '',
     };
   }
+
 	render(){
   return (
     <div>
       <h1>TEST</h1>
       <div>
-				<EditorContainer value={this.state.value} />
-				<UserContainer />
+        <EditorContainer value={this.state.value} />
       </div>
       <button
         onClick={() => {
