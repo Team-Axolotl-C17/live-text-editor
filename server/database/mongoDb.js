@@ -1,7 +1,9 @@
 /*  MongoDB Connection Logic */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const db = require('./config/mongoKey.js').mongoURI;
+const db = require('../config/mongoKey.js').mongoURI;
+
+console.log(db)
 
 mongoose
   .connect(db)
@@ -10,8 +12,8 @@ mongoose
 
 // User Schema
 const projectSchema = new Schema({
-    id: {type: String, required: true},
-    projectName: {type: String, require: true},
+    project_id: {type: String, required: true},
+    project_name: {type: String, require: true},
     body: {type: String, required: true},
   });
   

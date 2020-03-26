@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node server/server.js",
+    "start": "cross-env NODE_ENV=production nodemon server/server.js",
     "dev": "cross-env NODE_ENV=development concurrently \"webpack-dev-server --open\" \"nodemon server/server.js\"",
     "prestart": "webpack --mode production",
     "test": "jest",
@@ -24,8 +24,7 @@
       "server/**/*.{js}"
     ],
     "testMatch": [
-      "**/__tests__/**",
-      "**/?(*.)+(spec|test).js?(x)"
+      "**/__tests__/**/*.js"
     ]
   },
   "license": "ISC",

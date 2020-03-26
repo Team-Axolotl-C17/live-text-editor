@@ -2,8 +2,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const userController = require('./controllers/userController');
-const pgController = require('./controllers/pgController');
+const projectMiddleware = require('./controllers/projectMiddleware');
 const PORT = 3000;
+
 
 
 // Handle parsing request body
@@ -21,6 +22,98 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 app.use(require('webpack-hot-middleware')(compiler));
 
+/* Endpoint logic / Routes */
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../src/index.html'));
+});
+
+
+// Route handlers for user login
+app.get('/secret', (req, res) => {
+  return res.send('The password is potato');
+});
+
+app.post('/register', userController.createUser, (req, res) => {
+  return res.status(200).send('Successful add to database');
+});
+
+app.post('/login', userController.loginUser,  (req, res) => {
+  return res.status(200).json('Successful login');
+});
+
+
+// Route handlers for interacting with projects
+app.get('/getProjects',
+  // expects:
+      // req.body.user_id
+  projectMiddleware.getProjects,
+  (req, res) => {
+    return res.status(200).json(res.locals.projects)
+  }
+)
+
+app.post('/addNewProject', 
+  // expects:
+    // req.body.user_id
+    // req.body.project_name
+  projectMiddleware.addProjectToSql,
+  projectMiddleware.linkUsertoProject,
+  projectMiddleware.addProjectToMongo,
+  (req, res) => {
+    return res.status(200).json({project_id: res.locals.project_id, project_name: res.locals.project_name})
+})
+
+app.post('/saveExistingProject',
+  // expects:
+    // req.body.project_id
+    // req.body.body
+  projectMiddleware.updateProjectInMongo,
+  (req, res) => {
+    return res.status(200).send('success')
+  }
+)
+
+app.delete('/deleteExistingProject',
+  // expects: 
+      // req.body.project_id
+      // req.body.user_id (for user-specific updates in the future) 
+  projectMiddleware.unlinkUsersFromProject,
+  projectMiddleware.deleteProjectInSql,
+  projectMiddleware.deleteProjectInMongo,
+  (req, res) => {
+    return res.status(200).send('success')
+  }
+)
+
+app.get('/loadExistingProject',
+  // expects:
+    // req.body.project_id
+  projectMiddleware.loadExistingProject,
+  (req, res) => {
+    return res.status(200).json(res.locals.existingProjectCode) 
+  }
+)
+
+// Global error handler
+app.use((err, req, res, next) => {
+  if (err) {
+    console.log(err);
+    const defaultErr = {
+      log: 'Express error handler caught unknown middleware error',
+      status: 400,
+      message: { err: 'An error occurred' }
+    };
+    const errorObj = Object.assign(defaultErr, err);
+    res.status(errorObj.status).json(errorObj.message);
+  }
+});
+
+// Listens and checks if the server is running or not
+
+const server = app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
 
 /* Socket Logic */
 
@@ -37,6 +130,7 @@ io.on('connection', socket => {
   // Join data.room when 'room' event is emitted
   socket.on('join room', clientMsg => {
     socket.join(clientMsg.room);
+    if (lastBroadcastedCode[clientMsg.room] !== undefined)
     if (lastBroadcastedCode[clientMsg.room] !== undefined) {
       io.to(socket.id).emit(
         'code sent from server', 
@@ -62,47 +156,4 @@ io.on('connection', socket => {
     lastBroadcastedCode[clientMsg.room] = clientMsg.newCode;
     console.log('code data being broadcasted:', { code : clientMsg.newCode });
   });
-});
-
-/* Endpoint logic / Routes */
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../src/index.html'));
-});
-
-
-// Route handlers that uses postgres
-app.get('/secret', function(req, res) {
-  res.send('The password is potato');
-});
-app.post('/register', userController.createUser, (req, res) => {
-  return res.status(200).send('Successful add to database');
-});
-app.post('/login', userController.loginUser,  (req, res) => {
-  return res.status(200).json('Successful login');
-});
-
-
-// MongoDB routes / middleware
-
-
-
-// Global error handler
-app.use((err, req, res, next) => {
-  if (err) {
-    console.log(err);
-    const defaultErr = {
-      log: 'Express error handler caught unknown middleware error',
-      status: 400,
-      message: { err: 'An error occurred' }
-    };
-    const errorObj = Object.assign(defaultErr, err);
-    res.status(errorObj.status).json(errorObj.message);
-  }
-});
-
-// Listens and checks if the server is running or not
-
-const server = app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
 });
