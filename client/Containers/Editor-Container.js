@@ -33,6 +33,7 @@ class EditorContainer extends Component {
   }
 
   // Join or leave a project room upon button click
+
   joinRoom(e) {
     this.setState({ room: e.target.value });
     socket.emit('join room', 

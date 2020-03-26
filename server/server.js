@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const userController = require('./middleware/userController');
-const PORT = 3000;
+const userController = require('./middleware/userController');const PORT = 3000;
+
 
 
 // Handle parsing request body
@@ -31,48 +31,6 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 app.use(require('webpack-hot-middleware')(compiler));
 
-
-/* Socket Logic */
-
-const socket = require('socket.io');
-const io = socket(server);
-const lastBroadcastedCode = {}; // maintains object of lastBroadcastedCode, to serve to a client newly joining the room
-
-// test for connection
-io.on('connection', socket => {
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-
-  // Join data.room when 'room' event is emitted
-  socket.on('join room', clientMsg => {
-    socket.join(clientMsg.room);
-    if (lastBroadcastedCode[clientMsg.room] !== undefined) {
-      io.to(socket.id).emit(
-        'code sent from server', 
-        { code :lastBroadcastedCode[clientMsg.room] }
-      );
-    }
- // send the last broadcasted code for the room
-    console.log(`User ${socket.id} joined room "${clientMsg.room}"`);
-    console.log(`lastBroadcastedCode: ${lastBroadcastedCode[clientMsg.room]}`)
-  });
-
-  // TODO: Handle leave room event when user switches room
-  socket.on('leave room', clientMsg => {
-    socket.leave(clientMsg.room, err =>{
-      if (err) console.error(err);
-    });
-    console.log(`User ${socket.id} left room "${clientMsg.room}"`)
-  })
-
-  socket.on('client edited code', clientMsg => {
-    socket.broadcast.to(clientMsg.room).emit('code sent from server', { code: clientMsg.newCode });
-    // store last broadcasted code 
-    lastBroadcastedCode[clientMsg.room] = clientMsg.newCode;
-    console.log('code data being broadcasted:', { code : clientMsg.newCode });
-  });
-});
 
 /* Endpoint logic / Routes */
 
@@ -115,4 +73,48 @@ app.use((err, req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
+});
+
+/* Socket Logic */
+const socket = require('socket.io');
+const io = socket(server);
+
+
+
+const lastBroadcastedCode = {}; // maintains object of lastBroadcastedCode, to serve to a client newly joining the room
+
+// test for connection
+io.on('connection', socket => {
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  // Join data.room when 'room' event is emitted
+  socket.on('join room', clientMsg => {
+    socket.join(clientMsg.room);
+    if (lastBroadcastedCode[clientMsg.room] !== undefined) {
+      io.to(socket.id).emit(
+        'code sent from server', 
+        { code :lastBroadcastedCode[clientMsg.room] }
+      );
+    }
+ // send the last broadcasted code for the room
+    console.log(`User ${socket.id} joined room "${clientMsg.room}"`);
+    console.log(`lastBroadcastedCode: ${lastBroadcastedCode[clientMsg.room]}`)
+  });
+
+  // TODO: Handle leave room event when user switches room
+  socket.on('leave room', clientMsg => {
+    socket.leave(clientMsg.room, err =>{
+      if (err) console.error(err);
+    });
+    console.log(`User ${socket.id} left room "${clientMsg.room}"`)
+  })
+
+  socket.on('client edited code', clientMsg => {
+    socket.broadcast.to(clientMsg.room).emit('code sent from server', { code: clientMsg.newCode });
+    // store last broadcasted code 
+    lastBroadcastedCode[clientMsg.room] = clientMsg.newCode;
+    console.log('code data being broadcasted:', { code : clientMsg.newCode });
+  });
 });

@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 
-class UserDisplay extends Component {
+class Load extends Component {
     constructor() {
         super();
     }
 
     render() {
         return (
-            <div>
-                <h1>Users</h1>
-            </div>
+            <button>Load</button>
         )
     }
 }
 
-export default UserDisplay;
+export default Load;
