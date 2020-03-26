@@ -102,8 +102,6 @@ io.on('connection', (socket) => {
     console.log('Rooms:');
     console.log(io.sockets.adapter.rooms);
     roomsInUse = Object.keys(io.sockets.adapter.rooms).filter((key) => {
-      // console.log(key);
-      // console.log(onlineUsers[key]);
       return onlineUsers[key] === undefined;
     });
 
@@ -113,9 +111,6 @@ io.on('connection', (socket) => {
       const arr = [];
       Object.keys(io.sockets.adapter.rooms[room].sockets).forEach((sid) => {
         // push usernames into an array
-        // console.log('SID');
-        // console.log(sid);
-        // console.log(onlineUsers);
         arr.push(onlineUsers[sid]);
       });
       finRoom[room] = arr;
@@ -129,10 +124,7 @@ io.on('connection', (socket) => {
     // send all available rooms to all users
     socket.emit('availableRooms', roomsInUse);
 
-    // console.log('Rooms in use: ', roomsInUse);
-    // console.log(`User ${socket.id} joined room ${data.room}`);
     console.log(roomsInUse);
-    // console.log(io.sockets.adapter.rooms);
   }
 
   // TODO: Handle leave room event when user switches room

@@ -7,7 +7,7 @@ module.exports = {
   },
   mode: process.env.NODE_ENV,
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
   },
   devtool: 'source-map',
   devServer: {
@@ -19,15 +19,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
-      },
-      {
         test: /.jsx?$/,
         exclude: /node_modules/,
         use: {
@@ -38,7 +29,7 @@ module.exports = {
         },
       },
       {
-        test: /.s?[ac]ss$/,
+        test: /.(sa?)?css$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
