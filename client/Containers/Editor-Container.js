@@ -14,6 +14,7 @@ class EditorContainer extends Component {
       code: 'Start coding!',
       consoleOutput: 'Console output will display here',
       room: 'Axolotl',
+      dropRoom: '',
       username: auth.getUsername(),
       users: [],
       rooms: [],
@@ -83,20 +84,42 @@ class EditorContainer extends Component {
   }
 
   clicked() {
-    socket.emit('room', {
-      room: this.refs.room.value,
-    });
-    this.setState({ room: this.refs.room.value });
+    if (this.refs.room.value === '' && this.state.dropRoom !== 'Select Room') {
+      socket.emit('room', {
+        room: this.state.dropRoom,
+      });
+
+      this.setState({ room: this.state.dropRoom });
+    }
+    if (this.refs.room.value !== '') {
+      socket.emit('room', {
+        room: this.refs.room.value,
+      });
+      let roomValue = this.refs.room.value;
+      this.refs.room.value = '';
+      this.setState({ room: roomValue });
+    }
   }
 
   // TODO: Update the state to match what other clients have already put there.
   render() {
     return (
       <div>
-        <h1>Current Room: {this.state.room}</h1>
+        <h2>Current Room: {this.state.room}</h2>
         <input ref="room" type="text" />
         <button onClick={this.clicked}>Create/Join Room</button>
-        <ul>{this.state.users}</ul>
+        <select
+          id="dropdown"
+          value={this.state.dropRoom}
+          onChange={(e) => this.setState({ dropRoom: e.target.value })}>
+          <option value="">Select Room</option>
+          {this.state.rooms}
+        </select>
+        <div>
+          <h5>Users in {this.state.room}:</h5>
+          <ul>{this.state.users}</ul>
+        </div>
+        <br></br>
         <Editor
           code={this.state.code}
           room={this.state.room}
