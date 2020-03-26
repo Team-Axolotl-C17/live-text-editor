@@ -14,11 +14,10 @@ class MainApp extends Component {
   render() {
     return (
       <div>
-        <h1>Main App</h1>
+        <h1>Live Text Editor</h1>
+        <br></br>
         <div>
-          <DocsContainer />
           <EditorContainer value={this.state.value} />
-          <UserContainer />
         </div>
         <button
           onClick={() => {

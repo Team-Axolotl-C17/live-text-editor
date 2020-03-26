@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
     return res.status(200).sendFile(path.join(__dirname, '../index.html'));
   });
 
-  server = app.listen(3000); // listens on port 3000 -> http://localhost:3000/
+  server = app.listen(80); // listens on port 3000 -> http://localhost:3000/
 } else {
   server = app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}`);
@@ -114,15 +114,16 @@ io.on('connection', (socket) => {
         arr.push(onlineUsers[sid]);
       });
       finRoom[room] = arr;
+      io.in(room).emit('currentUsers', finRoom[room]);
     });
     console.log('USERS IN ROOMS:');
     console.log(finRoom);
 
     // update current user in user's room
-    socket.to(currentRoom).emit('currentUsers', finRoom[currentRoom]);
+    // io.emit('currentUsers', finRoom[currentRoom]);
 
     // send all available rooms to all users
-    socket.emit('availableRooms', roomsInUse);
+    io.emit('availableRooms', roomsInUse);
 
     console.log(roomsInUse);
   }
