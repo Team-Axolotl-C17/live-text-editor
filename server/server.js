@@ -59,11 +59,16 @@ app.get('/secret', function(req, res) {
   res.send('The password is potato');
 });
 app.post('/register', userController.createUser, (req, res) => {
-  return res.status(200).send('Successful add to database');
+  return res.status(200).json('Successful add to database');
 });
 app.post('/login', userController.loginUser, (req, res) => {
   return res.status(200).json('Successful login');
 });
+
+// deleting a user from the database 
+app.delete('/deleteuser', userController.deleteUser, (req, res) => {
+  return res.status(200).json('Successfully deleted the user')
+})
 
 // saving documents for the logged in user 
 app.post('/save', documentController.saveDoc, (req, res) => {
@@ -72,8 +77,14 @@ app.post('/save', documentController.saveDoc, (req, res) => {
 
 // retrieving saved docs in the front-end
 app.get('/retrieve', documentController.retrieveDoc, (req, res) => {
-  return res.status(200).send(res.locals.documents)
+  return res.status(200).json(res.locals.documents)
 })
+
+// deleting a specific document from the database
+app.delete('/deletedoc', documentController.deleteDoc, (req, res) => {
+  return res.status(200).json('Document successfully deleted')
+})
+
 
 // Global error handler
 app.use((err, req, res, next) => {

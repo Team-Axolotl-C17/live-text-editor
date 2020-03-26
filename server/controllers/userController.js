@@ -85,5 +85,21 @@ userController.loginUser = (req, res, next) => {
   })
 }
 
+userController.deleteUser = (req, res, next) => {
+  const { username } = req.body;
+  const deleteArr = [username];
+  const queryStr = 'DELETE FROM users WHERE username = $1'
+  db.query(queryStr, deleteArr, (err, data) => {
+    if (err) {
+      return next({
+          log: 'An error has occurred in deleteUser',
+          status: 400,
+          err: { err },
+      });
+    } else {
+      return next()
+    }
+  })
+}
 
 module.exports = userController;
