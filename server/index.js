@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === 'production') {
     return res.status(200).sendFile(path.join(__dirname, '../index.html'));
   });
 
+  app.listen(443);
   server = app.listen(80); // listens on port 3000 -> http://localhost:3000/
 } else {
   server = app.listen(PORT, () => {
