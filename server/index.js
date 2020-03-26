@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   // app.use('/emails/build', express.static(path.join(__dirname, '../build')));
   // serve index.html on the route '/'
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    return res.status(200).sendFile(path.join(__dirname, '../index.html'));
   });
 
   server = app.listen(3000); // listens on port 3000 -> http://localhost:3000/
