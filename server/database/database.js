@@ -13,3 +13,17 @@ module.exports = {
     return pool.query(query, params, cb);
   }
 }
+
+/*
+"user_project" schema
+create table user_project (
+_id serial not null,
+user_id int not null,
+project_id int not null,
+primary key (_id),
+foreign key (user_id) references users (user_id),
+foreign key (project_id) references projects (project_id)
+)
+
+
+ */
