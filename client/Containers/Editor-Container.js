@@ -48,6 +48,56 @@ class EditorContainer extends Component {
     );
   }
 
+
+  // Save Project logic
+  saveProject(e) {
+    fetch('/saveExistingProject', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ 
+        project_name: this.state.room, 
+        body: this.state.code })
+    })
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => console.error(err))
+  }
+
+  // Add Project to DB logic
+
+  addProject(e) {
+    //change state.room to input form state
+
+    fetch('/addNewProject', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ 
+        project_name: this.state.room, 
+        body: this.state.code })
+    })
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => console.error(err))
+  }
+
+  // Delete project Logic
+  
+  deleteProject(e) {
+    //drop down selection
+
+    fetch('/deleteExistingProject', {
+      method: 'DELETE',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        project_name: this.state.room
+      })
+    })
+    .then(console.log("Successfully Deleted"))
+    .catch(err => console.log(err))
+  }
+
   // Write code & receive up-to-date code
   emitCode(codeInLocalEditor) { 
     // Input is (1) props.code currently being displayed in CodeMirror and (2) any changes typed by the user.
@@ -88,6 +138,15 @@ class EditorContainer extends Component {
           runCode={this.runCode}
           consoleOutput={this.state.consoleOutput}
         />
+        <div>
+          <h1>Options</h1>
+        </div>
+        <div>
+          <button onClick={(e) => this.loadProject(e)}>Load</button>
+          <button onClick={(e) => this.saveProject(e)}>Save Project</button>
+          <button onClick={(e) => this.addProject(e)}>Add</button>
+          <button onClick={(e) => this.deleteProject(e)}>Delete</button>
+        </div>
       </div>
     );
   }
