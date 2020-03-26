@@ -106,9 +106,8 @@ projectMiddleware.updateProjectInMongo = (req, res, next) => {
 projectMiddleware.unlinkUsersFromProject = (req, res, next) => {
     // expects: 
         // req.body.project_id
-    const queryArr = [ req.body.project_id ]
-    const queryStr = 'DELETE FROM user_project WHERE project_id = $1'
-    db.query(queryStr, queryArr, (err, data) => {
+    const queryStr = `DELETE FROM user_project WHERE project_id = ${req.body.project_id}`
+    db.query(queryStr, (err, data) => {
         if (err) {
             return next({
                 log: 'An error has occurred in unlinkUsersFromProject dbquery',
@@ -124,9 +123,8 @@ projectMiddleware.deleteProjectInSql = (req, res, next) => {
     // expects: 
         // req.body.project_id
         // req.body.user_id (for user-specific updates in the future)
-    const queryArr = [ req.body.project_id ]
-    const queryStr = 'DELETE FROM projects WHERE project_id = $1'
-    db.query(queryStr, queryArr, (err, data) => {
+    const queryStr = `DELETE FROM projects WHERE project_id = ${req.body.project_id}`
+    db.query(queryStr, (err, data) => {
         if (err) {
             return next({
                 log: 'An error has occurred in deleteProjectInSql dbquery',
@@ -173,17 +171,40 @@ projectMiddleware.loadExistingProject = (req, res, next) => {
 /* getProjects */
 projectMiddleware.getProjects = (req, res, next) => {
     // expects:
-        // req.body.username
-    const queryArr = [ req.body.username ]
-    console.log(queryArr)
+        // req.query.username
     const queryStr = `
     SELECT up.project_id, p.project_name 
         FROM user_project up 
         INNER JOIN projects p ON up.project_id = p.project_id 
         INNER JOIN users u ON up.user_id = u.user_id 
-        WHERE u.username = $1
+        WHERE u.username = '${req.query.username}'
     `
-    db.query(queryStr, queryArr, (err, data) => {
+    db.query(queryStr, (err, data) => {
+        if (err) {
+            return next({
+                log: 'An error has occurred in addNewProject1 dbquery',
+                status: 400,
+                err: { err }
+            });
+        } 
+        res.locals.projects = data.rows
+        console.log(data.rows);
+        return next();
+    })
+}
+
+/* getAllProjects */
+projectMiddleware.getAllProjects = (req, res, next) => {
+    // expects:
+        // req.query.username
+    const queryStr = `
+    SELECT up.project_id, p.project_name 
+        FROM user_project up 
+        INNER JOIN projects p ON up.project_id = p.project_id 
+        INNER JOIN users u ON up.user_id = u.user_id 
+        WHERE u.username != '${req.query.username}'
+    `
+    db.query(queryStr, (err, data) => {
         if (err) {
             return next({
                 log: 'An error has occurred in addNewProject1 dbquery',

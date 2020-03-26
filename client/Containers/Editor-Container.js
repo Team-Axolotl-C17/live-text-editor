@@ -13,9 +13,11 @@ class EditorContainer extends Component {
       code: ' ',
       consoleOutput: 'Console output will display here',
       room: null, 
-      roomOptions: []
-    };
-    
+      roomOptions: [],
+      user_id: null,
+      roomOptionsOther: []
+      };
+
     // Listen for 'code sent from server'
     socket.on('code sent from server', socketMsg => {
       this.displayCode(socketMsg.code);
@@ -31,20 +33,36 @@ class EditorContainer extends Component {
 
   // emit 'room' event when component mounts
   componentDidMount() {
-    fetch('/getProjects', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: this.props.username
+      const data = { username : this.props.username }
+      console.log('componentDidMount: ', data)
+      fetch(`/getProjects?username=${this.props.username}`, {
+        method: 'GET',
       })
-    })
-    .then(res => {
-      return res.json();
-    })
-    .then(json => {
-      console.log('hello');
-      console.log(json)
-      this.setState({ roomOptions : json });
-    })
+      .then(res => {
+        return res.json();
+      })
+      .then(json => {
+        console.log('hello', json);
+        this.setState({ roomOptions : json });
+      })
+
+      fetch(`/getUserId?username=${this.props.username}`, {
+        method: 'GET'
+      })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        this.setState({ user_id : json.user_id })
+      })
+
+      fetch(`/getAllProjects?username=${this.props.username}`, {
+        method: 'GET'
+      })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json);
+        this.setState({ roomOptionsOther : json })
+      })
   }
 
   /* Join or leave room */
@@ -81,16 +99,19 @@ class EditorContainer extends Component {
 
   addProject(e) {
     //change state.room to input form state
-
+    console.log('project name', document.getElementById('newProjectInput').value);
     fetch('/addNewProject', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ 
-        project_name: this.state.room, 
-        body: this.state.code })
+        project_name: document.getElementById('newProjectInput').value, 
+        user_id: this.state.user_id,
+      })
     })
-    .then(res => {
-      console.log(res)
+    .then(res => res.json())
+    .then(json => {
+      console.log(json.project_name, ' added')
+      this.setState({ roomOptions: [...this.state.roomOptions, json ]})
     })
     .catch(err => console.error(err))
   }
@@ -98,16 +119,27 @@ class EditorContainer extends Component {
   // Delete project Logic
   
   deleteProject(e) {
-    //drop down selection
-
+    const project_id = this.state.roomOptions.filter((r) => this.state.room === r.project_name)[0].project_id;
+    console.log
     fetch('/deleteExistingProject', {
       method: 'DELETE',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        project_name: this.state.room
+        project_id: project_id
       })
     })
-    .then(console.log("Successfully Deleted"))
+    .then(() => {
+      this.setState({ roomOptions: this.state.roomOptions.reduce((acc, r) => {
+        if(this.state.room !== r.project_name) {
+          acc.push(r)
+        }
+        return acc;
+      }, [])
+      });
+    })
+    .then(() => {
+      this.leaveRoom();
+    })
     .catch(err => console.log(err))
   }
 
@@ -137,13 +169,29 @@ class EditorContainer extends Component {
   }
 
   render() {
+    const projectButtons = [];
+    this.state.roomOptions.forEach((project, i) => {
+      const button = <button key={i} value={project.project_name} onClick={(e) => this.joinRoom(e)}>{project.project_name}</button>
+      projectButtons.push(button)
+    })
+    const otherProjectButtons = [];
+    this.state.roomOptionsOther.forEach((project, i) => {
+      const button = <button key={i} value={project.project_name} onClick={(e) => this.joinRoom(e)}>{project.project_name}</button>
+      projectButtons.push(button)
+    })
     return (
       <div>
         <h1>Current Room: {this.state.room}</h1>
-        <button value='project1' onClick={(e) => this.joinRoom(e)}>Project1</button>
-        <button value='Project2' onClick={(e) => this.joinRoom(e)}>Project2</button>
-        <button onClick={(e) => this.leaveRoom(e)}>Leave Project</button>
-        <button onClick={(e) => this.saveProject(e)}>Save Project</button>
+        <span>{this.props.username}'s Existing Projects: </span>{projectButtons}
+        <span>Join Other People's Projects: </span>{otherProjectButtons}
+        <br/>
+        <button onClick={(e) => this.leaveRoom(e)}>Leave: {this.state.room}</button>
+        <button onClick={(e) => this.saveProject(e)}>Save: {this.state.room}
+        </button>
+        <button onClick={(e) => this.deleteProject(e)}>Delete: {this.state.room}</button>
+        <br/>
+        <input type="text" id="newProjectInput" required minLength="4" size="20"/>
+        <button onClick={(e) => this.addProject(e)}>Add New Project</button>
         <Editor
           code={this.state.code}
           room={this.state.room}
@@ -151,15 +199,6 @@ class EditorContainer extends Component {
           runCode={this.runCode}
           consoleOutput={this.state.consoleOutput}
         />
-        <div>
-          <h1>Options</h1>
-        </div>
-        <div>
-          <button onClick={(e) => this.loadProject(e)}>Load</button>
-          <button onClick={(e) => this.saveProject(e)}>Save Project</button>
-          <button onClick={(e) => this.addProject(e)}>Add</button>
-          <button onClick={(e) => this.deleteProject(e)}>Delete</button>
-        </div>
       </div>
     );
   }

@@ -48,6 +48,22 @@ userController.createUser = (req, res, next) => {
   })
 };
 
+userController.getUserId = (req, res, next) => {
+  const queryStr = `SELECT user_id FROM users WHERE username = '${req.query.username}'`
+  db.query(queryStr, (err, data) => {
+    if (err) {
+      return next({
+          log: 'An error has occurred in loginUser',
+          status: 400,
+          err: { err },
+      })
+    }
+    res.locals.user_id = data.rows[0].user_id
+    console.log(res.locals.user_id)
+    return next()
+  })
+}
+
 userController.loginUser = (req, res, next) => {
   const { username, password } = req.body;
   const queryArr = [username];

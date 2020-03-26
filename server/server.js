@@ -43,12 +43,30 @@ app.post('/login', userController.loginUser,  (req, res) => {
 
 
 // Route handlers for interacting with projects
-app.post('/getProjects',
+app.get('/getProjects',
   // expects:
-      // req.body.user_name
+      // req.query.username
   projectMiddleware.getProjects,
   (req, res) => {
     return res.status(200).json(res.locals.projects)
+  }
+)
+
+app.get('/getAllProjects',
+  // expects:
+      // req.query.username
+  projectMiddleware.getAllProjects,
+  (req, res) => {
+    return res.status(200).json(res.locals.projects)
+  }
+)
+
+app.get('/getUserId',
+  // expects:
+    // req.query.username
+  userController.getUserId,
+  (req, res) => {
+    return res.status(200).json({ user_id: res.locals.user_id })
   }
 )
 

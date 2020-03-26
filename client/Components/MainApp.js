@@ -5,11 +5,7 @@ import auth from "./auth";
 class MainApp extends Component {
 	constructor(props) {
     super(props);
-    this.state = {
-      value: '',
-    };
   }
-
 	render(){
     const username = this.props.username
   return (
