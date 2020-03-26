@@ -5,8 +5,6 @@ const userController = require('./controllers/userController');
 const projectMiddleware = require('./controllers/projectMiddleware');
 const PORT = 3000;
 
-
-
 // Handle parsing request body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -130,7 +128,9 @@ io.on('connection', socket => {
   // Join data.room when 'room' event is emitted
   socket.on('join room', clientMsg => {
     socket.join(clientMsg.room);
-    if (lastBroadcastedCode[clientMsg.room] !== undefined)
+    if (lastBroadcastedCode[clientMsg.room] === undefined) {
+      
+    }
     if (lastBroadcastedCode[clientMsg.room] !== undefined) {
       io.to(socket.id).emit(
         'code sent from server', 
