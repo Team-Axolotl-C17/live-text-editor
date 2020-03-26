@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import auth from '../Components/auth';
+import auth from '../Components/Auth';
 import Input from '../Components/Input';
 import Logo from '../Components/Logo';
 

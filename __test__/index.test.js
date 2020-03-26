@@ -2,12 +2,12 @@ const supertest = require("supertest");
 const app = "localhost:3000";
 
 describe("Route integration", () => {
-  describe("/", () => {
+  describe("/auth", () => {
 
     describe("GET", () => {
       it("responds with 200 status", () => {
         return supertest(app)
-          .get("/")
+          .get("/auth/test")
           .expect(200)
       });
     });
@@ -17,15 +17,15 @@ describe("Route integration", () => {
   describe("/login", () => {
 
     describe("POST", () => {
-      it("responds with 200 status", async () => {
+      it("responds with 200 status and expect username to be username", async () => {
         const res = await supertest(app)
-          .post("/login")
+          .post("/auth/login")
           .send({
             username: 'jordan',
             password: 'kelly'
           });
           expect(res.statusCode).toEqual(200)
-          expect(res.body).toBe('Successful login')
+          expect(res.body.username).toBe('jordan')
       });
     });
     
@@ -34,9 +34,9 @@ describe("Route integration", () => {
   xdescribe("/register", () => {
 
     describe("POST", () => {
-      it("responds with 200 status", async () => {
+      it("responds with 200 status and expect text to be successful", async () => {
         const res = await supertest(app)
-          .post("/register")
+          .post("/auth/register")
           .send({
             username: '8',
             password: 'stacks'

@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   // app.use('/emails/build', express.static(path.join(__dirname, '../build')));
   // serve index.html on the route '/'
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    return res.status(200).sendFile(path.join(__dirname, '../index.html'));
   });
 
   server = app.listen(3000); // listens on port 3000 -> http://localhost:3000/
@@ -54,6 +54,7 @@ app.use((err, req, res, next) => {
 const onlineUsers = {};
 let roomsInUse = [];
 let finRoom = {};
+let roomCode = {};
 
 // test for connection
 const io = socketServer(server);
@@ -83,6 +84,15 @@ io.on('connection', (socket) => {
       if (currentRoom) socket.leave(currentRoom);
 
       currentRoom = data.room;
+      console.log('current rooms code:');
+      console.log(roomCode[currentRoom]);
+
+      if (roomCode[currentRoom] === undefined) {
+        roomCode[currentRoom] = 'helo';
+      }
+
+      io.to(socket.id).emit('code sent from server', roomCode[currentRoom]);
+
       updateRooms();
     });
   });
@@ -114,7 +124,7 @@ io.on('connection', (socket) => {
     console.log(finRoom);
 
     // update current user in user's room
-    socket.to(currentRoom).emit('currentUsers', finRoom[currentRoom]);
+    io.in(currentRoom).emit('currentUsers', finRoom[currentRoom]);
 
     // send all available rooms to all users
     socket.emit('availableRooms', roomsInUse);
@@ -129,6 +139,7 @@ io.on('connection', (socket) => {
 
   // handle coding event
   socket.on('coding', (data) => {
+    roomCode[currentRoom] = data;
     // console.log(data);
     socket.broadcast.to(data.room).emit('code sent from server', data);
   });

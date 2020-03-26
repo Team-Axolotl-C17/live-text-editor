@@ -2,19 +2,19 @@
   "name": "react-kickstart",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "ISC",
   "scripts": {
     "start": "cross-env NODE_ENV=production concurrently \"node server/index.js\"",
     "dev": "cross-env NODE_ENV=development concurrently \"nodemon server/index.js\" \"webpack-dev-server --open\"",
     "build": "cross-env NODE_ENV=production webpack",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "watch": "jest --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Team-Axolotl-C17/live-text-editor.git"
   },
   "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/Team-Axolotl-C17/live-text-editor/issues"
   },

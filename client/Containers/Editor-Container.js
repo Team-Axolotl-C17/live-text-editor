@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import Editor from '../Components/Editor';
-import auth from '../Components/auth';
+import auth from '../Components/Auth';
 
 const socket = io('http://localhost:3000/');
 
@@ -25,11 +25,10 @@ class EditorContainer extends Component {
 
     socket.on('currentUsers', (payload) => {
       let usersArr = [];
+      console.log('users in room: ', payload);
       for (let i = 0; i < payload.length; i++) {
-        usersArr.push(<li>{payload[i]}</li>);
+        usersArr.push(<li key={payload[i]}>{payload[i]}</li>);
       }
-      console.log('Payload');
-      console.log(payload);
       this.setState({
         users: usersArr,
       });
@@ -38,6 +37,7 @@ class EditorContainer extends Component {
     socket.on('availableRooms', (payload) => {
       // console.log('testing');
       let roomsArr = [];
+      console.log('available rooms: ', payload);
       for (let i = 0; i < payload.length; i++) {
         roomsArr.push(<option value={payload[i]}>{payload[i]}</option>);
       }
