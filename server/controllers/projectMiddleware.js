@@ -173,9 +173,16 @@ projectMiddleware.loadExistingProject = (req, res, next) => {
 /* getProjects */
 projectMiddleware.getProjects = (req, res, next) => {
     // expects:
-        // req.body.user_id
-    const queryArr = [ req.body.user_id ]
-    const queryStr = 'SELECT up.project_id, p.project_name FROM user_project up INNER JOIN projects p ON up.project_id = p.project_id WHERE up.user_id = $1'
+        // req.body.username
+    const queryArr = [ req.body.username ]
+    console.log(queryArr)
+    const queryStr = `
+    SELECT up.project_id, p.project_name 
+        FROM user_project up 
+        INNER JOIN projects p ON up.project_id = p.project_id 
+        INNER JOIN users u ON up.user_id = u.user_id 
+        WHERE u.username = $1
+    `
     db.query(queryStr, queryArr, (err, data) => {
         if (err) {
             return next({
@@ -185,6 +192,7 @@ projectMiddleware.getProjects = (req, res, next) => {
             });
         } 
         res.locals.projects = data.rows
+        console.log(data.rows);
         return next();
     })
 }

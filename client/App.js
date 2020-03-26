@@ -24,7 +24,6 @@ class App extends React.Component {
       [name]: value
     });
   }
-
   render() {
     return (
       <div className="AppLayout">
@@ -35,7 +34,7 @@ class App extends React.Component {
             username = {this.state.username} 
             password = {this.state.password}
           />} />
-          <ProtectedRoute exact path="/" component={MainApp} />
+          <ProtectedRoute exact path="/" username= {this.state.username} component={MainApp} />
         </Switch>
       </div>
     );

@@ -12,7 +12,8 @@ class EditorContainer extends Component {
     this.state = {
       code: ' ',
       consoleOutput: 'Console output will display here',
-      room: null
+      room: null, 
+      roomOptions: []
     };
     
     // Listen for 'code sent from server'
@@ -30,8 +31,20 @@ class EditorContainer extends Component {
 
   // emit 'room' event when component mounts
   componentDidMount() {
+    console.log('hi')
+    console.log('username', this.props.username)
     fetch('/getProjects', {
-      
+      method: 'POST',
+      body: JSON.stringify({
+        username: this.props.username
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(json => {
+      this.setState({ roomOptions : json });
+      console.log(json)
     })
   }
 
