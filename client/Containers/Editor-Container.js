@@ -10,7 +10,7 @@ class EditorContainer extends Component {
   constructor() {
     super();
     this.state = {
-      code: '',
+      code: ' ',
       consoleOutput: 'Console output will display here',
       room: null
     };
@@ -25,15 +25,17 @@ class EditorContainer extends Component {
     this.runCode = this.runCode.bind(this);
     this.joinRoom = this.joinRoom.bind(this);
     this.leaveRoom = this.leaveRoom.bind(this);
+    this.saveProject = this.saveProject.bind(this);
   }
 
   // emit 'room' event when component mounts
   componentDidMount() {
-    //socket.emit('join room', { room: this.state.room });
+    fetch('/getProjects', {
+      
+    })
   }
 
-  // Join or leave a project room upon button click
-
+  /* Join or leave room */
   joinRoom(e) {
     this.setState({ room: e.target.value });
     socket.emit('join room', 
@@ -46,6 +48,21 @@ class EditorContainer extends Component {
     socket.emit('leave room', 
       { room: this.state.room }
     );
+  }
+
+  /* Save project */
+  saveProject(e) {
+    fetch('/saveExistingProject', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ 
+        project_name: this.state.room, 
+        body: this.state.code })
+    })
+    .then(res => {
+      console.log(res)
+    })
+    .catch(err => console.error(err))
   }
 
   // Write code & receive up-to-date code
@@ -73,14 +90,14 @@ class EditorContainer extends Component {
     );
   }
 
-  // TODO: Update the state to match what other clients have already put there.
   render() {
     return (
       <div>
         <h1>Current Room: {this.state.room}</h1>
-        <button value='Project1' onClick={(e) => this.joinRoom(e)}>Project1</button>
+        <button value='project1' onClick={(e) => this.joinRoom(e)}>Project1</button>
         <button value='Project2' onClick={(e) => this.joinRoom(e)}>Project2</button>
         <button onClick={(e) => this.leaveRoom(e)}>Leave Project</button>
+        <button onClick={(e) => this.saveProject(e)}>Save Project</button>
         <Editor
           code={this.state.code}
           room={this.state.room}

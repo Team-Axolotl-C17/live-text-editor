@@ -4,6 +4,7 @@ const app = express();
 const userController = require('./controllers/userController');
 const projectMiddleware = require('./controllers/projectMiddleware');
 const PORT = 3000;
+const Project = require('./database/mongoDb.js');
 
 // Handle parsing request body
 app.use(express.urlencoded({ extended: true }));
@@ -64,10 +65,11 @@ app.post('/addNewProject',
 
 app.post('/saveExistingProject',
   // expects:
-    // req.body.project_id
+    // req.body.project_name
     // req.body.body
   projectMiddleware.updateProjectInMongo,
   (req, res) => {
+    console.log('saved ', req.body.project_name)
     return res.status(200).send('success')
   }
 )
@@ -121,23 +123,24 @@ const lastBroadcastedCode = {}; // maintains object of lastBroadcastedCode, to s
 
 // test for connection
 io.on('connection', socket => {
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-
-  // Join data.room when 'room' event is emitted
+  // expects:
+    // clientMsg.room [project_name]
   socket.on('join room', clientMsg => {
     socket.join(clientMsg.room);
+    // if no one in the room, broadcast the file from db to the room
     if (lastBroadcastedCode[clientMsg.room] === undefined) {
-      
+      Project.findOne({ project_name : clientMsg.room }, (err, result) => {
+        io.to(socket.id).emit('code sent from server',
+          { code: result.body }
+        )
+      })
     }
+     // if anyone in the room, send the last broadcasted code for the room
     if (lastBroadcastedCode[clientMsg.room] !== undefined) {
-      io.to(socket.id).emit(
-        'code sent from server', 
+      io.to(socket.id).emit('code sent from server', 
         { code :lastBroadcastedCode[clientMsg.room] }
       );
     }
- // send the last broadcasted code for the room
     console.log(`User ${socket.id} joined room "${clientMsg.room}"`);
     console.log(`lastBroadcastedCode: ${lastBroadcastedCode[clientMsg.room]}`)
   });
@@ -150,10 +153,15 @@ io.on('connection', socket => {
     console.log(`User ${socket.id} left room "${clientMsg.room}"`)
   })
 
+  // braodcast client edited code
   socket.on('client edited code', clientMsg => {
     socket.broadcast.to(clientMsg.room).emit('code sent from server', { code: clientMsg.newCode });
     // store last broadcasted code 
     lastBroadcastedCode[clientMsg.room] = clientMsg.newCode;
     console.log('code data being broadcasted:', { code : clientMsg.newCode });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
 });

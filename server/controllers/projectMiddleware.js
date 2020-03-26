@@ -85,10 +85,11 @@ projectMiddleware.addProjectToMongo = (req, res, next) => {
 /* saveExistingProject */
 projectMiddleware.updateProjectInMongo = (req, res, next) => {
     // expects:
-        // req.body.project_id
+        // req.body.project_name
         // req.body.body
-    const { project_id, body } = req.body;
-    Project.updateOne({ project_id : project_id }, { body : body }, (err, res) => {
+    console.log('updateProjectInMongo')
+    const { project_name, body } = req.body;
+    Project.updateOne({ project_name : project_name }, { body : body }, (err, res) => {
         if (err) {
             return next({
                 log: 'An error has occurred in updateProjectInMongo dbquery',
