@@ -120,13 +120,24 @@ li {
 
 .AppLayout .codemirror {
   text-align: left;
-  min-width: 90vw;
+  min-width: 45vw;
+}
+
+.editor {
+  display: flex;
+  justify-content: space-between;
+  min-width: 45vw;
+  margin: 0 -5px;
+}
+
+.editor-container {
+  margin: 0 5px;
 }
 
 .console {
   text-align: left;
   min-height: 5rem;
-  min-width: 90vw;
+  min-width: 45vw;
   border-radius: 5px;
   padding: 1px;
   background-color: #282a36;
