@@ -2,7 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
+module.exports = {  
+  mode: process.env.NODE_ENV,
   entry: {
     app: ['./client/index.js', 'webpack-hot-middleware/client'],
     vendor: ['react', 'react-dom']
@@ -11,7 +12,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
-  mode: process.NODE_ENV,
   devServer: {
     publicPath: '/dist/',
     port: 8080,
