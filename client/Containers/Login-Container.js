@@ -2,34 +2,27 @@ import React, { Component } from "react";
 import auth from "../Components/auth";
 import Input from "../Components/Input";
 import Logo from "../Components/Logo";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class LoginContainer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      username: '',
-      password: '',
       warning: ''
     }
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.clickHandler = this.clickHandler.bind(this);
-  }
-
-  handleInputChange(event) {
-    const { value, name } = event.target;
-    this.setState({
-      [name]: value
-    });
   }
   
   clickHandler(event){
     event.preventDefault();
-    console.log(this.state);
+    console.log(this.props);
     fetch('/login', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(this.state)
+      body: JSON.stringify({
+        username: this.props.username, 
+        password: this.props.password
+      })
     }).
     then(res => {
       if (res.status === 401) {
@@ -53,16 +46,16 @@ class LoginContainer extends Component {
         <form onSubmit={this.clickHandler}>
           <Input
             type='text' 
-            value={this.state.username} 
+            value={this.props.username} 
             name='username' 
-            onChange={this.handleInputChange} 
+            onChange={(e) => this.props.handleInputChange(e)} 
             placeholder='username' 
           />
           <Input 
             type='password' 
-            value={this.state.password} 
+            value={this.props.password} 
             name='password' 
-            onChange={this.handleInputChange} 
+            onChange={(e) => this.props.handleInputChange(e)} 
             placeholder='password'
           />
           <Link to="/register">Register</Link>
@@ -76,4 +69,4 @@ class LoginContainer extends Component {
 
 };
 
-export default LoginContainer
+export default withRouter(LoginContainer)
