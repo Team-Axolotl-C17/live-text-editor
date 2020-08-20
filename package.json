@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Team-Axolotl-C17/live-text-editor#readme",
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "codemirror": "^5.52.0",
     "context-eval": "^0.1.0",
     "express": "^4.17.1",
